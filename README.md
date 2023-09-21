@@ -30,7 +30,6 @@ The Bank CLI project aims to develop a command-line interface (CLI) for banking 
 
 ### 1.3 Document Conventions
 - UML diagrams are used for visual representation.
-- [Add any other document conventions as necessary.]
 
 ### 1.4 Intended Audience
 This document is intended for the development team, project managers, quality assurance personnel, potential employers, and anyone interested in understanding the technical aspects of the project.
@@ -73,13 +72,9 @@ The Bank CLI project leverages the following technologies:
 ## 3. Installation
 
 ### Prerequisites
-- [List any prerequisites or dependencies here.]
+- 
 
 ### Installation Steps
-1. [Step 1: Describe the first installation step.]
-2. [Step 2: Describe the second installation step.]
-3. [Step 3: Describe the third installation step.]
-   - [Include sub-steps or additional details if necessary.]
 
 ## 4. Usage
 
