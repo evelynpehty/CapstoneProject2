@@ -30,7 +30,6 @@ public class RegistrationPage {
         if (isConfirmed){
             //add database logic
             System.out.println("Customer created!");
-            ExistingCustomers.showAccountsMenu(scanner);
         }
 
     }
