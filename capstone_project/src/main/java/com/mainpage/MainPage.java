@@ -11,8 +11,24 @@ public class MainPage {
         while (!isExit) {
             displayTeller();
             choice = getUserChoice(scanner, 3);
+            switch (choice) {
+                case 1:
+                    // Add logic for creating a new account
+                    break;
+                case 2:
+                    displayAccounts();
+                    break;
+                case 3:
+                    isExit = exitConfirmation(scanner);
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+
             displayMenu();
             choice = getUserChoice(scanner, 8);
+
 
             switch (choice) {
                 case 1:
@@ -38,6 +54,7 @@ public class MainPage {
                     break;
                 case 8:
                     isExit = exitConfirmation(scanner);
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
