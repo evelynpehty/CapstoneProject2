@@ -16,6 +16,7 @@ public class MenuChoices {
             }
             userChoice = scanner.nextInt();
             scanner.nextLine();
+            System.out.println("\n\n\n");
 
             if (userChoice < 1 || userChoice > noOfChoice) {
                 System.out.println("Invalid input. Please enter a number between 1-" + noOfChoice + ".");
@@ -25,19 +26,18 @@ public class MenuChoices {
         return userChoice;
     }
 
-    public static boolean exitConfirmation(Scanner scanner) {
-        System.out.print("Are you sure you want to exit the application? Y/N: ");
+    public static boolean yesnoConfirmation(Scanner scanner, String message) {
+        System.out.print(message);
         String input = scanner.next().toLowerCase();
         scanner.nextLine();
         while (true) {
             if (input.equals("y")) {
-                System.out.println("Goodbye :(");
                 return true;
             } else if (input.equals("n")) {
                 return false;
             } else {
                 System.out.println("Invalid choice. Please enter either Y or N");
-                System.out.print("Are you sure you want to exit the application? Y/N: ");
+                System.out.print(message);
                 input = scanner.next().toLowerCase();
                 scanner.nextLine();
             }

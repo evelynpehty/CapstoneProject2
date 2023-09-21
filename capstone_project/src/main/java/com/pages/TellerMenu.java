@@ -20,13 +20,13 @@ public class TellerMenu {
             choice = MenuChoices.getUserChoice(scanner, 3);
             switch (choice) {
                 case 1:
-                    // Add logic for creating a new account
+                    RegistrationPage.show(scanner);
                     break;
                 case 2:
                     ExistingCustomers.showAccountsMenu(scanner);
                     break;                   
                 case 3:
-                    isExit = MenuChoices.exitConfirmation(scanner);
+                    isExit = MenuChoices.yesnoConfirmation(scanner, "Are you sure you want to exit the application? Y/N: ");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
