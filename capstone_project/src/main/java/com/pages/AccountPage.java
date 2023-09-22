@@ -31,27 +31,27 @@ public class AccountPage {
 
         switch (choice) {
             case 1:
-                
+                account.viewBalance();
                 break;
             case 2:
-                
+                account.deposit(scanner);
                 break;
             case 3:
-                
+                account.withdraw(scanner);
                 break;
             case 4:
-                
+
                 break;
             case 5:
-                
+
                 break;
             case 6:
-                
+
                 break;
             case 7:
-                
+
                 break;
-        
+
             default:
                 break;
         }

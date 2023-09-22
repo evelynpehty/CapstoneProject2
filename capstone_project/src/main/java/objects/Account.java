@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 import com.essentials.GetConn;
+import com.validations.Validations;
 
 public class Account {
     private int id;
@@ -21,7 +22,7 @@ public class Account {
         try {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-
+            resultSet.next();
             this.id = resultSet.getInt("account_id");
             this.nric = resultSet.getString("nric");
             this.balance = resultSet.getDouble("account_balance");
@@ -106,5 +107,50 @@ public class Account {
         }
         GetConn.closeConn();
         return valid_id;
+    }
+    public void viewBalance(){
+        System.out.println("Your " + getType() + " account " + getId() + " balance is: " + getBalance());
+    }
+
+    public void deposit(Scanner scanner){
+        System.out.println("Please enter the amount to deposit: ");
+        double amount = Validations.validateDouble(scanner);
+        setBalance(getBalance() + amount);
+        String sql = "UPDATE account SET account_balance = ? WHERE account_id = ?";
+        PreparedStatement stmt = GetConn.getPreparedStatement(sql);
+        try {
+            stmt.setDouble(1, getBalance());
+            stmt.setInt(2, getId());
+            stmt.execute();
+            System.out.println(amount + " deposited!");
+            System.out.println("New balance: " + getBalance());
+            GetConn.closeConn();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Error depositing");
+        }
+    }
+
+    public void withdraw(Scanner scanner){
+        System.out.println("Please enter the amount to withdraw: ");
+        double amount = Validations.validateDouble(scanner);
+        if (amount > getBalance()){
+            System.out.println("Insufficient funds to withdraw. Returning to account menu...");
+        } else{
+            setBalance(getBalance() - amount);
+            String sql = "UPDATE account SET account_balance = ? WHERE account_id = ?";
+            PreparedStatement stmt = GetConn.getPreparedStatement(sql);
+            try {
+                stmt.setDouble(1, getBalance());
+                stmt.setInt(1, getId());
+                stmt.execute();
+                System.out.println(amount + " withdrawn!");
+                System.out.println("New balance: " + getBalance());
+                GetConn.closeConn();
+            } catch (SQLException e) {
+                System.out.println("Error withdrawing");
+            }
+        }
+
     }
 }
