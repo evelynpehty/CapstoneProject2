@@ -38,10 +38,10 @@ public class DisplayAccountsPage {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            GetConn.closeConn();
             choice = MenuChoices.getUserChoice(scanner, accounts.size());
             System.out.println("Account selected: " + accounts.get(choice - 1));
             // AccountPage.run(accounts.get(choice - 1));
-
         }
     }
 }
