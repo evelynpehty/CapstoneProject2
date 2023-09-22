@@ -33,6 +33,7 @@ public class DisplayAccountsPage {
                     + " - " + resultSet.getInt(1)); 
 
                     accounts.add(resultSet.getString(1)); //account id
+                    count++;
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
