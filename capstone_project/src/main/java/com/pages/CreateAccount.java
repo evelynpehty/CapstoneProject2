@@ -24,7 +24,7 @@ public class CreateAccount {
                     System.out.println("Savings Account Created!");
                     break;
                 case 2:
-                    isExit=true;
+                    isExit = true;
                     // displayAccounts();
                     System.out.println("Current Account Created!");
                     break;
