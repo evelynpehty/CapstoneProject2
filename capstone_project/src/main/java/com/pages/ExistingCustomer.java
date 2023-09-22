@@ -27,6 +27,7 @@ public class ExistingCustomer {
             }
             resultSet.close();
             pstmt.close();
+            GetConn.closeConn();
 
         } catch (SQLException e) {
             e.printStackTrace();
