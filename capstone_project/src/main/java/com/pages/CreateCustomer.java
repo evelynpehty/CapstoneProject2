@@ -19,25 +19,25 @@ import com.essentials.GetConn;;
 public class CreateCustomer {
     static String nric;
 
-    static ResultSet scanNRIC(Scanner scanner){
+    static ResultSet scanNRIC(Scanner scanner) {
         System.out.print("Enter your NRIC: ");
         nric = scanner.nextLine();
-        
-        while(true){
-            if(nric.trim().isEmpty()){
+
+        while (true) {
+            if (nric.trim().isEmpty()) {
                 System.out.print("NRIC is required, please enter NRIC: ");
                 nric = scanner.nextLine();
-            }else{
+            } else {
                 break;
             }
         }
-        
+
         try {
             // check if NRIC exists
             String query = "SELECT * FROM CUSTOMER WHERE UPPER(NRIC) = UPPER(?)";
             PreparedStatement preparedStatement = GetConn.getPreparedStatement(query);
             preparedStatement.setString(1, nric);
-    
+
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet;
         } catch (SQLException se) {
@@ -46,44 +46,43 @@ public class CreateCustomer {
         }
     }
 
-    public static void show(Scanner scanner){
+    public static void show(Scanner scanner) {
         try {
             // dob - required field and check date format and age atleast 18
             System.out.print("Enter your DOB (YYYY-MM-DD): ");
             String strDate = scanner.nextLine();
             LocalDate dob;
-            while (true){
-                if(chkDate.checkDateFormat(strDate) && chkDate.checkDateValidity(strDate)){         
+            while (true) {
+                if (chkDate.checkDateFormat(strDate) && chkDate.checkDateValidity(strDate)) {
                     dob = LocalDate.parse(strDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     break;
-                }
-                else{
+                } else {
                     System.out.print("Invalid date format. Please re-enter DOB in YYYY-MM-DD format: ");
                     strDate = scanner.nextLine();
-                }   
+                }
             }
-            
+
             // Calculate age
             LocalDate currentDate = LocalDate.now();
             Period age = Period.between(dob, currentDate);
-            
+
             // Check if the person is at least 18 years old
             if (age.getYears() >= 18) {
-                if(scanNRIC(scanner).next()){
+                if (scanNRIC(scanner).next()) {
                     // customer exist;
                     System.out.println("Customer Exists!");
-                } else{
+                } else {
                     // customer odes not exists
-                    
+
                     // FIRST NAME - required field and only contain alphabet
                     System.out.print("Enter your first name: ");
                     String firstName = scanner.nextLine();
 
-                    while(true){
-                        if(!chkText.checkText(firstName)){
+                    while (true) {
+                        if (!chkText.checkText(firstName)) {
                             System.out.print("Invalid input. Re-Enter First Name: ");
                             firstName = scanner.nextLine();
-                        }else{
+                        } else {
                             break;
                         }
                     }
@@ -92,11 +91,11 @@ public class CreateCustomer {
                     System.out.print("Enter your last name: ");
                     String lastName = scanner.nextLine();
 
-                    while(true){
-                        if(!chkText.checkText(lastName)){
+                    while (true) {
+                        if (!chkText.checkText(lastName)) {
                             System.out.print("Invalid input. Re-Enter Last Name: ");
                             lastName = scanner.nextLine();
-                        }else{
+                        } else {
                             break;
                         }
                     }
@@ -105,15 +104,15 @@ public class CreateCustomer {
                     System.out.print("Enter gender (M/F): ");
                     String gender = scanner.nextLine();
 
-                    while(true){
-                        if (gender.equalsIgnoreCase("M") || gender.equalsIgnoreCase("F")){
-                            if (gender.equalsIgnoreCase("M")){
+                    while (true) {
+                        if (gender.equalsIgnoreCase("M") || gender.equalsIgnoreCase("F")) {
+                            if (gender.equalsIgnoreCase("M")) {
                                 gender = "Male";
-                            } else{
+                            } else {
                                 gender = "Female";
                             }
                             break;
-                        } else{
+                        } else {
                             System.out.print("Invalid input. Re-Enter gender (M/F):  ");
                             gender = scanner.nextLine();
                         }
@@ -123,29 +122,29 @@ public class CreateCustomer {
                     System.out.print("Enter phone number: ");
                     String phoneNumber = scanner.nextLine();
 
-                    while (true){
-                        if(chkDigits.checkDigits(phoneNumber)){
+                    while (true) {
+                        if (chkDigits.checkDigits(phoneNumber)) {
                             break;
-                        } else{
+                        } else {
                             System.out.print("Invalid input. Re-Enter phone number:  ");
                             phoneNumber = scanner.nextLine();
                         }
                     }
-                
+
                     // EMAIL - not required field and can be empty
                     System.out.print("Enter your email: ");
                     String email = scanner.nextLine();
 
-                    if(email.isEmpty() == false){
-                        while (true){
-                            if(chkEmail.checkEmailFormat(email)){
+                    if (email.isEmpty() == false) {
+                        while (true) {
+                            if (chkEmail.checkEmailFormat(email)) {
                                 break;
-                            }else{
+                            } else {
                                 System.out.print("Invalid email format. Re-Enter email: ");
                                 email = scanner.nextLine();
                             }
                         }
-                    } else{
+                    } else {
                         email = null;
                     }
 
@@ -153,10 +152,10 @@ public class CreateCustomer {
                     System.out.print("Enter your nationality: ");
                     String nationality = scanner.nextLine();
 
-                    while(true){
-                        if(chkText.checkText(nationality)){
+                    while (true) {
+                        if (chkText.checkText(nationality)) {
                             break;
-                        }else{
+                        } else {
                             System.out.print("Invalid input. Re-Enter Nationality: ");
                             nationality = scanner.nextLine();
                         }
@@ -167,7 +166,7 @@ public class CreateCustomer {
                     String reset = "\033[0m";
 
                     System.out.println();
-                    System.out.println(bold+ "Customer Details"+reset);
+                    System.out.println(bold + "Customer Details" + reset);
                     System.out.println("+---------------------+---------------------+");
                     System.out.printf("| %-19s | %-19s |%n", "Date of Birth:", strDate);
                     System.out.printf("| %-19s | %-19s |%n", "NRIC:", nric);
@@ -185,10 +184,11 @@ public class CreateCustomer {
                     System.out.printf("| %-19s | %-19s |%n", "Nationality:", nationality);
                     System.out.println("+---------------------+---------------------+");
 
-                    boolean isConfirmed = MenuChoices.yesnoConfirmation(scanner, "Key Y to confirm creation, N to cancel creation: ");
-                    
-                    if (isConfirmed){
-                        //add database logic
+                    boolean isConfirmed = MenuChoices.yesnoConfirmation(scanner,
+                            "Key Y to confirm creation, N to cancel creation: ");
+
+                    if (isConfirmed) {
+                        // add database logic
                         String insertQuery = "INSERT INTO CUSTOMER (nric, first_name, last_name, gender, phone_number, dob, email, nationality) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                         PreparedStatement pStat = GetConn.getPreparedStatement(insertQuery);
                         pStat.setString(1, nric);
@@ -198,25 +198,25 @@ public class CreateCustomer {
                         pStat.setString(5, phoneNumber);
                         pStat.setDate(6, Date.valueOf(dob));
                         pStat.setString(7, email);
-                        pStat.setString(8,  nationality);
-                        
+                        pStat.setString(8, nationality);
+
                         // Execute the INSERT statement
                         int rowsInserted = pStat.executeUpdate();
-                        if (rowsInserted > 0) {                    
+                        if (rowsInserted > 0) {
                             System.out.println("Customer created!");
                         } else {
                             System.out.println("Failed to insert data. Please try again");
                         }
-                    } 
+                    }
                 }
             } else {
                 System.out.println("Unable to Create Customer. He/she must be atleast 18 years old.");
             }
-            
+
         } catch (SQLException se) {
             // TODO: handle exception
             System.out.println(se.getMessage());
-        } finally{
+        } finally {
             GetConn.closeConn();
         }
     }
