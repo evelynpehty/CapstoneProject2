@@ -23,7 +23,7 @@ public class ExistingCustomers {
                     CreateAccount.show(scanner);
                     break;
                 case 2:
-                    DisplayAccountsPage.show(scanner, "A1234567Z"); //delete before merging
+                    DisplayAccountsPage.show(scanner, "A1234567Z"); //delete before mergingp
                     break;
                 case 3:
                     // Add logic for editing account details
