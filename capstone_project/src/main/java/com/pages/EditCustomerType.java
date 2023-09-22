@@ -136,7 +136,7 @@ public class EditCustomerType {
 
             boolean isConfirmed = promptConfirmation(scanner, "Confirm changes (Y/N)? ");
             if (isConfirmed) {
-                String sql = "UPDATE CUSTOMER SET " + currentEmail + " = ? WHERE NRIC = ? ";
+                String sql = "UPDATE CUSTOMER SET EMAIL = ? WHERE NRIC = ? ";
                 try {
                     pstmt = GetConn.getPreparedStatement(sql);
                     pstmt.setString(1, newEmail);
