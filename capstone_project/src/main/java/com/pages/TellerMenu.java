@@ -20,7 +20,7 @@ public class TellerMenu {
             choice = MenuChoices.getUserChoice(scanner, 3);
             switch (choice) {
                 case 1:
-                    RegistrationPage.show(scanner);
+                    CreateCustomer.show(scanner);
                     break;
                 case 2:
                     ExistingCustomers.showAccountsMenu(scanner);

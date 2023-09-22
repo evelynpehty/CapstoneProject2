@@ -16,7 +16,7 @@ public class ExistingCustomers {
             System.out.println("3. Edit Account Details");
             System.out.println("4. Exit");
 
-            choice = MenuChoices.getUserChoice(scanner, 4);
+            choice = MenuChoices.getUserChoice(scanner, 8);
 
             switch (choice) {
                 case 1:
