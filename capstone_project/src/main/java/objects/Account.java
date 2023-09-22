@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 import com.essentials.GetConn;
-import com.validations.Validations;
+import com.validations.Validation;
 
 public class Account {
     private int id;
@@ -85,36 +85,13 @@ public class Account {
         this.active = active;
     }
 
-    public void transfer(Scanner scanner) {
-        System.out.println("Transfer fund to another account...");
-        System.out.println("Please enter the following details.");
-        System.out.println("Enter the payee's account ID: ");
-        int payee = scanner.nextInt();
-    }
-
-    private int exist(int id) {
-        PreparedStatement statement = GetConn.getPreparedStatement("SELECT account_id FROM account WHERE account_id = ?");
-        int valid_id = -1;
-        try {
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                valid_id = resultSet.getInt("account_id");
-            }
-        } catch (SQLException e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
-        GetConn.closeConn();
-        return valid_id;
-    }
     public void viewBalance(){
         System.out.println("Your " + getType() + " account " + getId() + " balance is: " + getBalance());
     }
 
     public void deposit(Scanner scanner){
         System.out.println("Please enter the amount to deposit: ");
-        double amount = Validations.validateDouble(scanner);
+        double amount = Validation.validateDouble(scanner);
         setBalance(getBalance() + amount);
         String sql = "UPDATE account SET account_balance = ? WHERE account_id = ?";
         PreparedStatement stmt = GetConn.getPreparedStatement(sql);
@@ -133,7 +110,7 @@ public class Account {
 
     public void withdraw(Scanner scanner){
         System.out.println("Please enter the amount to withdraw: ");
-        double amount = Validations.validateDouble(scanner);
+        double amount = Validation.validateDouble(scanner);
         if (amount > getBalance()){
             System.out.println("Insufficient funds to withdraw. Returning to account menu...");
         } else{
@@ -151,6 +128,29 @@ public class Account {
                 System.out.println("Error withdrawing");
             }
         }
+    }
 
+    public void transfer(Scanner scanner) {
+        System.out.println("Transfer fund to another account...");
+        System.out.println("Please enter the following details.");
+        System.out.println("Enter the payee's account ID: ");
+        Account payee = getAccount(Validation.validateInt(scanner));
+    }
+
+    private Account getAccount(int id) {
+        PreparedStatement statement = GetConn.getPreparedStatement("SELECT account_id FROM account WHERE account_id = ?");
+        Account account = null;
+        try {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                account = new Account(resultSet.getInt("account_id"));
+            }
+        } catch (SQLException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        GetConn.closeConn();
+        return account;
     }
 }
