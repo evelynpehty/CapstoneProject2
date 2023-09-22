@@ -18,7 +18,6 @@ import com.essentials.GetConn;;
 
 public class CreateCustomer {
     static String nric;
-
     static ResultSet scanNRIC(Scanner scanner){
         System.out.print("Enter your NRIC: ");
         nric = scanner.nextLine();
