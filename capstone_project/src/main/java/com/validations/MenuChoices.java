@@ -16,7 +16,7 @@ public class MenuChoices {
             }
             userChoice = scanner.nextInt();
             scanner.nextLine();
-            // System.out.println("\n\n\n");
+            System.out.println("\n\n\n");
 
             if (userChoice < 1 || userChoice > noOfChoice) {
                 System.out.println("Invalid input. Please enter a number between 1-" + noOfChoice + ".");
