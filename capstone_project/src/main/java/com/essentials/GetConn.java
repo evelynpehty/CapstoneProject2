@@ -19,13 +19,13 @@ public class GetConn {
     public static Connection getConnection() throws SQLException {
         conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         assert conn != null : "connection fail";
-            
+
         return conn;
     }
-    
+
     // STATEMENT
-    public static Statement getStatement(){
-        try{
+    public static Statement getStatement() {
+        try {
             conn = getConnection();
             statement = conn.createStatement();
             return statement;
@@ -38,20 +38,19 @@ public class GetConn {
     }
 
     // PREPARED STATEMENT
-    static public PreparedStatement getPreparedStatement(String query){
-        try{
+    static public PreparedStatement getPreparedStatement(String query) {
+        try {
             conn = getConnection();
             preparedStatement = conn.prepareStatement(query);
             return preparedStatement;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
         }
     }
-    
+
     // CLOSE CONNECTION
-    static public void closeConn(){
+    static public void closeConn() {
         try {
             conn.close();
         } catch (Exception e) {
