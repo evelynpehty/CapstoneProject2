@@ -17,6 +17,35 @@ import com.validations.chkDate;
 import com.essentials.GetConn;;
 
 public class CreateCustomer {
+    static String nric;
+
+    static ResultSet scanNRIC(Scanner scanner){
+        System.out.print("Enter your NRIC: ");
+        String nric = scanner.nextLine();
+        
+        while(true){
+            if(nric.trim().isEmpty()){
+                System.out.print("NRIC is required, please enter NRIC: ");
+                nric = scanner.nextLine();
+            }else{
+                break;
+            }
+        }
+        
+        try {
+            // check if NRIC exists
+            String query = "SELECT * FROM CUSTOMER WHERE UPPER(NRIC) = UPPER(?)";
+            PreparedStatement preparedStatement = GetConn.getPreparedStatement(query);
+            preparedStatement.setString(1, nric);
+    
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet;
+        } catch (SQLException se) {
+            System.out.println(se.getMessage());
+            return null;
+        }
+    }
+
     public static void show(Scanner scanner){
         try {
             // dob - required field and check date format and age atleast 18
@@ -40,26 +69,7 @@ public class CreateCustomer {
             
             // Check if the person is at least 18 years old
             if (age.getYears() >= 18) {
-                System.out.print("Enter your NRIC: ");
-                String nric = scanner.nextLine();
-
-                while(true){
-                    if(nric.trim().isEmpty()){
-                        System.out.print("NRIC is required, please enter NRIC: ");
-                        nric = scanner.nextLine();
-                    }else{
-                        break;
-                    }
-                }
-                
-                // check if NRIC exists
-                String query = "SELECT * FROM CUSTOMER WHERE UPPER(NRIC) = UPPER(?)";
-                PreparedStatement preparedStatement = GetConn.getPreparedStatement(query);
-                preparedStatement.setString(1, nric);
-
-                ResultSet resultSet = preparedStatement.executeQuery();
-                
-                if(resultSet.next()){
+                if(scanNRIC(scanner).next()){
                     // customer exist;
                     System.out.println("Customer Exists!");
                 } else{
