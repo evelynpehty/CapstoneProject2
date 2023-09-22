@@ -8,6 +8,7 @@ public class MainPage {
         TellerLogin.login(scanner);
 
         scanner.close();
+        
     }
 
     

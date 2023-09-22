@@ -41,6 +41,7 @@ public class GetConn {
     static public PreparedStatement getPreparedStatement(String query){
         try{
             conn = getConnection();
+            assert conn != null : "No connection";
             preparedStatement = conn.prepareStatement(query);
             return preparedStatement;
         }

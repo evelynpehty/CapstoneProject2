@@ -10,6 +10,7 @@ public class TellerMenu {
         int choice;
         boolean isExit = false;
         while (!isExit) {
+            System.out.println("----------------------------");
             System.out.println("Welcome to the Bank Teller");
             System.out.println("----------------------------");
             System.out.println("Please select an option:");
@@ -23,7 +24,7 @@ public class TellerMenu {
                     CreateCustomer.show(scanner);
                     break;
                 case 2:
-                    ExistingCustomers.showAccountsMenu(scanner);
+                    ExistingCustomer.checkExistingCustomer(scanner);
                     break;                   
                 case 3:
                     isExit = MenuChoices.yesnoConfirmation(scanner, "Are you sure you want to exit the application? Y/N: ");
