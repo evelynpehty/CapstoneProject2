@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Scanner;
 
 import com.essentials.GetConn;
 
@@ -81,5 +82,29 @@ public class Account {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void transfer(Scanner scanner) {
+        System.out.println("Transfer fund to another account...");
+        System.out.println("Please enter the following details.");
+        System.out.println("Enter the payee's account ID: ");
+        int payee = scanner.nextInt();
+    }
+
+    private int exist(int id) {
+        PreparedStatement statement = GetConn.getPreparedStatement("SELECT account_id FROM account WHERE account_id = ?");
+        int valid_id = -1;
+        try {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                valid_id = resultSet.getInt("account_id");
+            }
+        } catch (SQLException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        GetConn.closeConn();
+        return valid_id;
     }
 }
