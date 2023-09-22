@@ -9,6 +9,9 @@ public class TellerLogin {
         String password;
         boolean isExit = false;
         while (!isExit){
+            System.out.println("-------------");
+            System.out.println("Teller Login");
+            System.out.println("-------------");
             System.out.print("Enter your teller username: ");
             username = scanner.nextLine();
 
