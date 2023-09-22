@@ -21,7 +21,7 @@ public class CreateCustomer {
 
     static ResultSet scanNRIC(Scanner scanner){
         System.out.print("Enter your NRIC: ");
-        String nric = scanner.nextLine();
+        nric = scanner.nextLine();
         
         while(true){
             if(nric.trim().isEmpty()){
