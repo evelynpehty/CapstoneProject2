@@ -1,5 +1,6 @@
 package objects;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,19 +30,19 @@ public class Account {
 
             switch (resultSet.getString("account_type")) {
                 case "Savings":
-                this.type = AccountType.SAVINGS;
-                break;
+                    this.type = AccountType.SAVINGS;
+                    break;
                 case "Checking":
-                this.type = AccountType.CHECKING;
-                break;
+                    this.type = AccountType.CHECKING;
+                    break;
                 case "Fixed Deposit":
-                this.type = AccountType.FIXED_DEPOSIT;
-                break;
-                
+                    this.type = AccountType.FIXED_DEPOSIT;
+                    break;
+
                 default:
-                System.out.println("Invalid account type. Setting to default savings account type.");
-                this.type = AccountType.SAVINGS;
-                break;
+                    System.out.println("Invalid account type. Setting to default savings account type.");
+                    this.type = AccountType.SAVINGS;
+                    break;
             }
 
             this.active = resultSet.getInt("isaccountactive") == 1 ? true : false;
@@ -85,45 +86,67 @@ public class Account {
         this.active = active;
     }
 
-    public void viewBalance(){
+    public void viewBalance() {
         System.out.println("Your " + getType() + " account " + getId() + " balance is: " + getBalance());
     }
 
-    public void deposit(Scanner scanner){
+    public void deposit(Scanner scanner) {
         System.out.println("Please enter the amount to deposit: ");
         double amount = Validation.validateDouble(scanner);
         setBalance(getBalance() + amount);
         String sql = "UPDATE account SET account_balance = ? WHERE account_id = ?";
-        PreparedStatement stmt = GetConn.getPreparedStatement(sql);
         try {
+            PreparedStatement stmt = GetConn.getPreparedStatement(sql);
             stmt.setDouble(1, getBalance());
             stmt.setInt(2, getId());
             stmt.execute();
-            System.out.println(amount + " deposited!");
-            System.out.println("New balance: " + getBalance());
             GetConn.closeConn();
+
+            sql = "INSERT INTO transaction VALUES (transaction_id_seq.nextval, ?, ?, ?, ?, null)";
+            stmt = GetConn.getPreparedStatement(sql);
+            stmt.setInt(1, getId());
+            stmt.setString(2, "Deposit");
+            stmt.setDouble(3, amount);
+            stmt.setDate(4, Date.valueOf(LocalDate.now()));
+            stmt.execute();
+            
+            System.out.println("Successfully deposited $" + amount);
+            // stmt.setInt(5, );not needed
+            GetConn.closeConn();
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("Error depositing");
         }
     }
 
-    public void withdraw(Scanner scanner){
+    public void withdraw(Scanner scanner) {
         System.out.println("Please enter the amount to withdraw: ");
         double amount = Validation.validateDouble(scanner);
-        if (amount > getBalance()){
+        if (amount > getBalance()) {
             System.out.println("Insufficient funds to withdraw. Returning to account menu...");
-        } else{
+        } else {
             setBalance(getBalance() - amount);
             String sql = "UPDATE account SET account_balance = ? WHERE account_id = ?";
-            PreparedStatement stmt = GetConn.getPreparedStatement(sql);
             try {
+                PreparedStatement stmt = GetConn.getPreparedStatement(sql);
                 stmt.setDouble(1, getBalance());
-                stmt.setInt(1, getId());
+                stmt.setInt(2, getId());
                 stmt.execute();
-                System.out.println(amount + " withdrawn!");
-                System.out.println("New balance: " + getBalance());
                 GetConn.closeConn();
+                
+                sql = "INSERT INTO transaction VALUES (transaction_id_seq.nextval, ?, ?, ?, ?, null)";
+                stmt = GetConn.getPreparedStatement(sql);
+                stmt.setInt(1, getId());
+                stmt.setString(2, "Withdraw");
+                stmt.setDouble(3, amount);
+                stmt.setDate(4, Date.valueOf(LocalDate.now()));
+                stmt.execute();
+                // stmt.setInt(5, );not needed
+                System.out.println("Successfully withdrew $" + amount);
+
+                GetConn.closeConn();
+
             } catch (SQLException e) {
                 System.out.println("Error withdrawing");
             }
@@ -138,7 +161,8 @@ public class Account {
     }
 
     private Account getAccount(int id) {
-        PreparedStatement statement = GetConn.getPreparedStatement("SELECT account_id FROM account WHERE account_id = ?");
+        PreparedStatement statement = GetConn
+                .getPreparedStatement("SELECT account_id FROM account WHERE account_id = ?");
         Account account = null;
         try {
             statement.setInt(1, id);
