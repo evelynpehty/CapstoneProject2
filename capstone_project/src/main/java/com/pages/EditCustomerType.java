@@ -90,7 +90,7 @@ public class EditCustomerType {
 
                 case 7:
                     isExit = MenuChoices.yesnoConfirmation(scanner,
-                            "Are you sure you want to exit without saving changes? Y/N: ");
+                            "Are you sure you want to exit any changes? Y/N: ");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
