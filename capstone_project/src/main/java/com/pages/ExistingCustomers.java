@@ -20,7 +20,7 @@ public class ExistingCustomers {
 
             switch (choice) {
                 case 1:
-                    CreateAccount.show(scanner);
+                    CreateAccount.show(scanner,"a1234567z");
                     break;
                 case 2:
                     // displayAccounts();
