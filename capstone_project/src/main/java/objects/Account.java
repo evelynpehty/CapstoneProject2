@@ -93,125 +93,132 @@ public class Account {
     }
 
     public void deposit(Scanner scanner){
-        System.out.println("Deposit fund into this account...");
-        System.out.println("Please enter the following details.");
-        System.out.print("Enter the amount to deposit: ");
-        double amount = Validation.validateDouble(scanner);
-        this.setBalance(this.getBalance() + amount);
-
-        String sql = "UPDATE account SET account_balance = ? WHERE account_id = ?";
-        try {
-            PreparedStatement stmt = GetConn.getPreparedStatement(sql);
-            stmt.setDouble(1, getBalance());
-            stmt.setInt(2, getId());
-            stmt.execute();
-            GetConn.closeConn();
-
-            sql = "INSERT INTO transaction VALUES (transaction_id_seq.nextval, ?, ?, ?, ?, null)";
-            stmt = GetConn.getPreparedStatement(sql);
-            stmt.setInt(1, getId());
-            stmt.setString(2, "Deposit");
-            stmt.setDouble(3, amount);
-            stmt.setDate(4, Date.valueOf(LocalDate.now()));
-            stmt.execute();
-            
-            System.out.println("Successfully deposited $" + amount);
-            // stmt.setInt(5, );not needed
-            GetConn.closeConn();
-
-        } catch (SQLException e) {
-            System.err.println("Error occurred while depositing.");
+        if (!this.isActive()) {
+            System.out.println("This account is inactive. Please activate it before making a deposit.");
+        } else {
+            System.out.println("Deposit fund into this account...");
+            System.out.println("Please enter the following details.");
+            System.out.print("Enter the amount to deposit: ");
+            double amount = Validation.validateDouble(scanner);
+            this.setBalance(this.getBalance() + amount);
+    
+            try {
+                String sql = "UPDATE account SET account_balance = ? WHERE account_id = ?";
+                PreparedStatement stmt = GetConn.getPreparedStatement(sql);
+                stmt.setDouble(1, this.getBalance());
+                stmt.setInt(2, this.getId());
+                stmt.executeUpdate();
+                GetConn.closeConn();
+    
+                sql = "INSERT INTO transaction VALUES (transaction_id_seq.nextval, ?, ?, ?, ?, null)";
+                stmt = GetConn.getPreparedStatement(sql);
+                stmt.setInt(1, this.getId());
+                stmt.setString(2, "Deposit");
+                stmt.setDouble(3, amount);
+                stmt.setDate(4, Date.valueOf(LocalDate.now()));
+                stmt.executeUpdate();
+                GetConn.closeConn();
+    
+                System.out.println("Successfully deposited $" + amount);
+            } catch (SQLException e) {
+                System.err.println("Error occurred while depositing.");
+            }
         }
-        GetConn.closeConn();
     }
 
     public void withdraw(Scanner scanner){
-        System.out.println("Withdraw fund from this account...");
-        System.out.println("Please enter the following details.");
-        System.out.print("Enter the amount to withdraw: ");
-        double amount = Validation.validateDouble(scanner);
-
-        if (amount > this.getBalance()){
-            System.out.println("Insufficient fund. Returning to account...");
+        if (!this.isActive()) {
+            System.out.println("This account is inactive. Please activate it before making a withdrawal.");
         } else {
-            this.setBalance(this.getBalance() - amount);
-
-            String sql = "UPDATE account SET account_balance = ? WHERE account_id = ?";
-            try {
-                PreparedStatement stmt = GetConn.getPreparedStatement(sql);
-                stmt.setDouble(1, getBalance());
-                stmt.setInt(2, getId());
-                stmt.execute();
-                GetConn.closeConn();
-                
-                sql = "INSERT INTO transaction VALUES (transaction_id_seq.nextval, ?, ?, ?, ?, null)";
-                stmt = GetConn.getPreparedStatement(sql);
-                stmt.setInt(1, getId());
-                stmt.setString(2, "Withdraw");
-                stmt.setDouble(3, amount);
-                stmt.setDate(4, Date.valueOf(LocalDate.now()));
-                stmt.execute();
-                // stmt.setInt(5, );not needed
-                System.out.println("Successfully withdrew $" + amount);
-
-                GetConn.closeConn();
-
-            } catch (SQLException e) {
-                System.err.println("Error occurred while withdrawing.");
+            System.out.println("Withdraw fund from this account...");
+            System.out.println("Please enter the following details.");
+            System.out.print("Enter the amount to withdraw: ");
+            double amount = Validation.validateDouble(scanner);
+    
+            if (amount > this.getBalance()){
+                System.out.println("Insufficient fund. Returning to account...");
+            } else {
+                this.setBalance(this.getBalance() - amount);
+    
+                try {
+                    String sql = "UPDATE account SET account_balance = ? WHERE account_id = ?";
+                    PreparedStatement stmt = GetConn.getPreparedStatement(sql);
+                    stmt.setDouble(1, this.getBalance());
+                    stmt.setInt(2, this.getId());
+                    stmt.executeUpdate();
+                    GetConn.closeConn();
+                    
+                    sql = "INSERT INTO transaction VALUES (transaction_id_seq.nextval, ?, ?, ?, ?, null)";
+                    stmt = GetConn.getPreparedStatement(sql);
+                    stmt.setInt(1, this.getId());
+                    stmt.setString(2, "Withdraw");
+                    stmt.setDouble(3, amount);
+                    stmt.setDate(4, Date.valueOf(LocalDate.now()));
+                    stmt.executeUpdate();
+                    GetConn.closeConn();
+    
+                    System.out.println("Successfully withdrew $" + amount);
+                } catch (SQLException e) {
+                    System.err.println("Error occurred while withdrawing.");
+                }
             }
-            GetConn.closeConn();
         }
     }
 
     public void transfer(Scanner scanner) {
-        System.out.println("Transfer fund to another account...");
-        System.out.println("Please enter the following details.");
-        System.out.print("Enter the payee's account ID: ");
-        Account payee = getAccount(Validation.validateInt(scanner));
-
-        if (Objects.isNull(payee)) {
-            System.out.println("Account ID could not be found.");
+        if (!this.isActive()) {
+            System.out.println("This account is inactive. Please activate it before making a transfer");
         } else {
-            System.out.print("Enter the amount to transfer: ");
-            double amount = Validation.validateDouble(scanner);
-
-            if (amount > this.getBalance()) {
-                System.out.println("Insufficient fund. Returning to account...");
+            System.out.println("Transfer fund to another account...");
+            System.out.println("Please enter the following details.");
+            System.out.print("Enter the payee's account ID: ");
+            Account payee = getAccount(Validation.validateInt(scanner));
+    
+            if (Objects.isNull(payee)) {
+                System.out.println("Account ID could not be found.");
+            } else if (!payee.isActive()) {
+                System.out.println("The payee's account is inactive. Fund cannot be transferred to the account.");
             } else {
-                this.setBalance(this.getBalance() - amount);
-                payee.setBalance(payee.getBalance() + amount);
-
-                try {
-                    PreparedStatement statement = GetConn.getPreparedStatement("UPDATE account SET account_balance = ? WHERE account_id = ?");
-                    statement.setDouble(1, this.getBalance());
-                    statement.setInt(2, this.getId());
-                    statement.executeUpdate();
-                    statement.setDouble(1, payee.getBalance());
-                    statement.setInt(2, payee.getId());
-                    statement.executeUpdate();
-                    GetConn.closeConn();
-
-                    statement = GetConn.getPreparedStatement("INSERT INTO transaction VALUES(transaction_id_seq.NEXTVAL, ?, ?, ?, ?, ?)");
-                    statement.setInt(1, this.getId());
-                    statement.setString(2, "Transfer");
-                    statement.setDouble(3, amount);
-                    statement.setDate(4, Date.valueOf(LocalDate.now()));
-                    statement.setInt(5, payee.getId());
-                    statement.executeUpdate();
-                    GetConn.closeConn();
-
-                    System.out.println("Fund has been transferred successfully.");
-                } catch (SQLException e) {
-                    // TODO: handle exception
-                    System.err.println("Error occurred while transferring.");
+                System.out.print("Enter the amount to transfer: ");
+                double amount = Validation.validateDouble(scanner);
+    
+                if (amount > this.getBalance()) {
+                    System.out.println("Insufficient fund. Returning to account...");
+                } else {
+                    this.setBalance(this.getBalance() - amount);
+                    payee.setBalance(payee.getBalance() + amount);
+    
+                    try {
+                        PreparedStatement statement = GetConn.getPreparedStatement("UPDATE account SET account_balance = ? WHERE account_id = ?");
+                        statement.setDouble(1, this.getBalance());
+                        statement.setInt(2, this.getId());
+                        statement.executeUpdate();
+                        statement.setDouble(1, payee.getBalance());
+                        statement.setInt(2, payee.getId());
+                        statement.executeUpdate();
+                        GetConn.closeConn();
+    
+                        statement = GetConn.getPreparedStatement("INSERT INTO transaction VALUES(transaction_id_seq.NEXTVAL, ?, ?, ?, ?, ?)");
+                        statement.setInt(1, this.getId());
+                        statement.setString(2, "Transfer");
+                        statement.setDouble(3, amount);
+                        statement.setDate(4, Date.valueOf(LocalDate.now()));
+                        statement.setInt(5, payee.getId());
+                        statement.executeUpdate();
+                        GetConn.closeConn();
+    
+                        System.out.println("Fund has been transferred successfully.");
+                    } catch (SQLException e) {
+                        // TODO: handle exception
+                        System.err.println("Error occurred while transferring.");
+                    }
                 }
             }
         }
     }
 
     private Account getAccount(int id) {
-        PreparedStatement statement = GetConn
-                .getPreparedStatement("SELECT account_id FROM account WHERE account_id = ?");
+        PreparedStatement statement = GetConn.getPreparedStatement("SELECT account_id FROM account WHERE account_id = ?");
         Account account = null;
         try {
             statement.setInt(1, id);
