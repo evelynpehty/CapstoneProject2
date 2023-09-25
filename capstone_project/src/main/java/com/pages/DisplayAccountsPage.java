@@ -19,7 +19,7 @@ public class DisplayAccountsPage {
             System.out.println("Please select from the following options");
             System.out.println("-----------------------------------------");
             
-            String sql = "SELECT account_id, account_type FROM account WHERE nric = ?";
+            String sql = "SELECT account_id, account_type FROM account WHERE nric = upper(?)";
             
             PreparedStatement stmt = GetConn.getPreparedStatement(sql);
             ResultSet resultSet;
