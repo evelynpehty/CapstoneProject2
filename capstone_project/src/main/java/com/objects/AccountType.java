@@ -1,4 +1,4 @@
-package objects;
+package com.objects;
 
 public enum AccountType {
     SAVINGS,

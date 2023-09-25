@@ -2,10 +2,9 @@ package com.pages;
 
 import java.util.Scanner;
 
+import com.objects.Account;
 import com.styles.Console;
 import com.validations.MenuChoices;
-
-import objects.Account;
 
 public class AccountPage {
     private static int show() {
