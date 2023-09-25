@@ -9,7 +9,6 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-import com.validations.MenuChoices;
 import com.validations.chkText;
 import com.validations.chkDigits;
 import com.validations.chkEmail;
