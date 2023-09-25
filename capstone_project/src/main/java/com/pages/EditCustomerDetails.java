@@ -48,7 +48,7 @@ public class EditCustomerDetails {
                 e.printStackTrace();
                 return; // Exit on database error
             }
-            System.out.println("Hello" + currentFirstName);
+            System.out.println("Hello " + currentFirstName);
             System.out.println(FontStyle.bold + "Customer Details" + FontStyle.reset);
             System.out.println("+---+---------------------+---------------------+");
             System.out.printf("| %1s | %-19s | %-19s |%n", "", "NRIC", nric);
@@ -72,27 +72,31 @@ public class EditCustomerDetails {
                 case 1:
                     editType = "FIRST_NAME";
                     currentInformation = currentFirstName;
-                    // editFirstName(nric, scanner);
+                    ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
                     break;
                 case 2:
                     editType = "LAST_NAME";
                     currentInformation = currentLastName;
+                    ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
                     break;
 
                 case 3:
                     editType = "PHONE_NUMBER";
                     currentInformation = currentPhoneNumber;
+                    ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
                     break;
 
                 case 4:
                     editType = "EMAIL";
                     currentInformation = currentEmail;
                     isEmail = true;
+                    ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
                     break;
 
                 case 5:
                     editType = "NATIONALITY";
                     currentInformation = currentNationality;
+                    ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
                     break;
 
                 case 6:
@@ -101,9 +105,6 @@ public class EditCustomerDetails {
                     break;
                 default:
                     System.out.println("Invalid choice. Please select (Y/N).");
-            }
-            while (!isExit) {
-                ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
             }
         }
     }
