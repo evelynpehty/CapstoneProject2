@@ -5,15 +5,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.validations.MenuChoices;
+import com.validations.chkText;
+import com.validations.chkDigits;
 import com.validations.chkEmail;
 import com.essentials.GetConn;
+import com.styles.FontStyle;
+import com.validations.MenuChoices;
 
-public class EditCustomerType {
+public class EditCustomerDetails {
     static String currentFirstName;
     static String currentLastName;
     static String currentPhoneNumber;
     static String currentEmail;
+    static String currentdob;
     static String currentNationality;
 
     public static void show(Scanner scanner, String nric) {
@@ -32,6 +36,7 @@ public class EditCustomerType {
                 if (resultSet.next()) {
                     currentFirstName = resultSet.getString("FIRST_NAME");
                     currentLastName = resultSet.getString("LAST_NAME");
+                    currentdob = resultSet.getString("DOB");
                     currentPhoneNumber = resultSet.getString("PHONE_NUMBER");
                     currentEmail = resultSet.getString("EMAIL");
                     currentNationality = resultSet.getString("NATIONALITY");
@@ -43,19 +48,25 @@ public class EditCustomerType {
                 e.printStackTrace();
                 return; // Exit on database error
             }
-            System.out.println("NRIC: " + nric);
-            System.out.println("Hello " + currentFirstName);
-            System.out.println("-----------------------------------------");
-            System.out.println("Please Choose The Option You Like To Edit: ");
-            System.out.println("1. Edit first name: ");
-            System.out.println("2. Edit last name: ");
-            System.out.println("3. Gender: ");
-            System.out.println("4. Edit phone number: ");
-            System.out.println("5. Edit email: ");
-            System.out.println("6. Edit nationality: ");
-            System.out.println("7. Back");
+            System.out.println("Hello" + currentFirstName);
+            System.out.println(FontStyle.bold + "Customer Details" + FontStyle.reset);
+            System.out.println("+---+---------------------+---------------------+");
+            System.out.printf("| %1s | %-19s | %-19s |%n", "", "NRIC", nric);
+            System.out.printf("| %1s | %-19s | %-19s |%n", "1", "First Name", currentFirstName);
+            System.out.printf("| %1s | %-19s | %-19s |%n", "2", "Last Name", currentLastName);
+            System.out.printf("| %1s | %-19s | %-19s |%n", "3", "Phone", currentPhoneNumber);
 
-            choice = MenuChoices.getUserChoice(scanner, 7);
+            if (currentEmail == null) {
+                System.out.printf("| %1s | %-19s | %-19s |%n", "4", "Email", "");
+            } else {
+                System.out.printf("| %1s | %-19s | %-19s |%n", "4", "Email", currentEmail);
+            }
+
+            System.out.printf("| %1s | %-19s | %-19s |%n", "5", "Nationality", currentNationality);
+            System.out.printf("| %1s | %-19s | %-19s |%n", "6", "Back", "");
+            System.out.println("+---+---------------------+---------------------+");
+
+            choice = MenuChoices.getUserChoice(scanner, 6);
 
             switch (choice) {
                 case 1:
@@ -69,33 +80,31 @@ public class EditCustomerType {
                     break;
 
                 case 3:
-                    editGender(nric, scanner);
-                    break;
-
-                case 4:
                     editType = "PHONE_NUMBER";
                     currentInformation = currentPhoneNumber;
                     break;
 
-                case 5:
+                case 4:
                     editType = "EMAIL";
                     currentInformation = currentEmail;
                     isEmail = true;
                     break;
 
-                case 6:
+                case 5:
                     editType = "NATIONALITY";
                     currentInformation = currentNationality;
                     break;
 
-                case 7:
+                case 6:
                     isExit = MenuChoices.yesnoConfirmation(scanner,
-                            "Are you sure you want to exit any changes? Y/N: ");
+                            "Are you sure you want to return to menu? Y/N: ");
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid choice. Please select (Y/N).");
             }
-            ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+            while (!isExit) {
+                ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+            }
         }
     }
 
@@ -110,23 +119,30 @@ public class EditCustomerType {
                 String NewInfor = scanner.nextLine();
                 boolean isConfirmed = promptConfirmation(scanner, "Confirm changes (Y/N)? ");
                 if (isConfirmed) {
-                    if (isEmail) {
-                        if (!chkEmail.checkEmailFormat(NewInfor)) {
-                            System.out.println("Invalid email format. Please enter a valid email address.");
-                            continue;
-                        }
-
-                        String sql = "UPDATE CUSTOMER SET " + editType + " = ? WHERE NRIC = UPPER(?)";
-                        try {
-                            pstmt = GetConn.getPreparedStatement(sql);
-                            pstmt.setString(1, NewInfor);
-                            pstmt.setString(2, nric);
-                            pstmt.execute();
-                            System.out.println(editType + " updated to: " + NewInfor);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                    boolean isValid = true;
+                    if (editType == "EMAIL") {
+                        isValid = chkEmail.checkEmailFormat(NewInfor);
                     }
+                    if (editType == "PHONE_NUMBER") {
+                        isValid = chkDigits.checkDigits(NewInfor);
+                    }
+
+                    if (!isValid) {
+                        System.out.println("Invalid " + editType + " format. Please enter a valid input.");
+                        continue;
+                    }
+
+                    String sql = "UPDATE CUSTOMER SET " + editType + " = ? WHERE NRIC = UPPER(?)";
+                    try {
+                        pstmt = GetConn.getPreparedStatement(sql);
+                        pstmt.setString(1, NewInfor);
+                        pstmt.setString(2, nric);
+                        pstmt.execute();
+                        System.out.println(editType + " updated to: " + NewInfor);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
                 } else {
                     boolean retry = promptConfirmation(scanner, "Continue to edit? (Y/N)");
@@ -137,10 +153,6 @@ public class EditCustomerType {
             }
             break;
         } while (true);
-    }
-
-    private static void editGender(String nric, Scanner scanner) {
-        System.out.println("Don't need booking. Tmr appointment 9am.");
     }
 
     private static boolean promptConfirmation(Scanner scanner, String message) {
