@@ -10,7 +10,7 @@ public class AccountPage {
     private static int show() {
         int n = 7;
 
-        System.out.println("Please select an action from the follwing list.");
+        System.out.println("Please select an action from the following list.");
         System.out.println("1. View balance");
         System.out.println("2. Deposit fund");
         System.out.println("3. Withdraw fund");
