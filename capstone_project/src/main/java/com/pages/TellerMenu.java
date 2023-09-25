@@ -10,6 +10,7 @@ public class TellerMenu {
         int choice;
         boolean isExit = false;
         while (!isExit) {
+            System.out.println("----------------------------");
             System.out.println("Welcome to the Bank Teller");
             System.out.println("----------------------------");
             System.out.println("Please select an option:");

@@ -49,7 +49,7 @@ public class ExistingCustomer {
 
             switch (choice) {
                 case 1:
-                    // CreateAccount.show(scanner, nric);
+                    CreateAccount.show(scanner, nric);
                     break;
                 case 2:
                     // DisplayAccountsPage(scanner,nric);
