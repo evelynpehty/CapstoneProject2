@@ -3,7 +3,6 @@ package com.pages;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Scanner;
 
 import com.validations.MenuChoices;
@@ -17,7 +16,7 @@ public class EditCustomerType {
         String currentPhoneNumber;
         String currentEmail = "";
         String currentNationality;
-        String sql = "SELECT * FROM CUSTOMER WHERE NRIC = ?";
+        String sql = "SELECT * FROM CUSTOMER WHERE UPPER (NRIC) = UPPER (?)";
         PreparedStatement stmt = GetConn.getPreparedStatement(sql);
 
         String currentInformation = "";
