@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.validations.MenuChoices;
+import com.validations.chkEmail;
 import com.essentials.GetConn;
 
 public class EditCustomerType {
@@ -14,7 +15,7 @@ public class EditCustomerType {
         String currentFirstName;
         String currentLastName;
         String currentPhoneNumber;
-        String currentEmail = "";
+        String currentEmail;
         String currentNationality;
         String sql = "SELECT * FROM CUSTOMER WHERE UPPER (NRIC) = UPPER (?)";
         PreparedStatement stmt = GetConn.getPreparedStatement(sql);
@@ -24,6 +25,7 @@ public class EditCustomerType {
         int choice;
         boolean isExit = false;
         while (!isExit) {
+            boolean isEmail = false;
             try {
                 stmt.setString(1, nric);
                 ResultSet resultSet = stmt.executeQuery();
@@ -42,14 +44,15 @@ public class EditCustomerType {
                 return; // Exit on database error
             }
             System.out.println("NRIC: " + nric);
+            System.out.println("Hello " + currentFirstName);
             System.out.println("-----------------------------------------");
             System.out.println("Please Choose The Option You Like To Edit: ");
-            System.out.println("1. EDIT FIRST NAME: ");
-            System.out.println("2. EDIT LAST NAME: ");
-            System.out.println("3. GENDER: ");
-            System.out.println("4. EDIT PHONE NUMBER: ");
-            System.out.println("5. EDIT EMAIL: ");
-            System.out.println("6. EDIT NATIONALITY: ");
+            System.out.println("1. Edit first name: ");
+            System.out.println("2. Edit last name: ");
+            System.out.println("3. Gender: ");
+            System.out.println("4. Edit phone number: ");
+            System.out.println("5. Edit email: ");
+            System.out.println("6. Edit nationality: ");
             System.out.println("7. Back");
 
             choice = MenuChoices.getUserChoice(scanner, 7);
@@ -75,14 +78,14 @@ public class EditCustomerType {
                     break;
 
                 case 5:
-                    editNewEmail(nric, scanner, currentEmail);
+                    editType = "EMAIL";
                     currentInformation = currentEmail;
+                    isEmail = true;
                     break;
 
                 case 6:
                     editType = "NATIONALITY";
                     currentInformation = currentNationality;
-
                     break;
 
                 case 7:
@@ -92,66 +95,47 @@ public class EditCustomerType {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-            ModifyInfor(nric, scanner, currentInformation, editType);
+            ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
         }
     }
 
-    private static void ModifyInfor(String nric, Scanner scanner, String currentInformation, String editType) {
+    private static void ModifyInfor(String nric, Scanner scanner, String currentInformation, String editType,
+            boolean isEmail) {
         PreparedStatement pstmt;
         do {
             System.out.println("Current Information: " + currentInformation);
             System.out.println("Enter new Information: ");
-            String NewInfor = scanner.nextLine();
 
-            boolean isConfirmed = promptConfirmation(scanner, "Confirm changes (Y/N)? ");
-            if (isConfirmed) {
-                String sql = "UPDATE CUSTOMER SET " + editType + " = ? WHERE NRIC = ?";
-                try {
-                    pstmt = GetConn.getPreparedStatement(sql);
-                    pstmt.setString(1, NewInfor);
-                    pstmt.setString(2, nric);
-                    pstmt.execute();
-                    System.out.println(editType + " updated to: " + NewInfor);
+            while (true) {
+                String NewInfor = scanner.nextLine();
+                boolean isConfirmed = promptConfirmation(scanner, "Confirm changes (Y/N)? ");
+                if (isConfirmed) {
+                    if (isEmail) {
+                        if (!chkEmail.checkEmailFormat(NewInfor)) {
+                            System.out.println("Invalid email format. Please enter a valid email address.");
+                            continue;
+                        }
 
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                break;
-            } else {
-                boolean retry = promptConfirmation(scanner, "Continue to edit? (Y/N)");
-                if (!retry) {
+                        String sql = "UPDATE CUSTOMER SET " + editType + " = ? WHERE NRIC = UPPER(?)";
+                        try {
+                            pstmt = GetConn.getPreparedStatement(sql);
+                            pstmt.setString(1, NewInfor);
+                            pstmt.setString(2, nric);
+                            pstmt.execute();
+                            System.out.println(editType + " updated to: " + NewInfor);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     break;
+                } else {
+                    boolean retry = promptConfirmation(scanner, "Continue to edit? (Y/N)");
+                    if (!retry) {
+                        break;
+                    }
                 }
             }
-        } while (true);
-    }
-
-    private static void editNewEmail(String nric, Scanner scanner, String currentEmail) {
-        PreparedStatement pstmt;
-        do {
-            System.out.println("Current Email: " + currentEmail);
-            System.out.println("Enter new Email: ");
-            String newEmail = scanner.nextLine();
-
-            boolean isConfirmed = promptConfirmation(scanner, "Confirm changes (Y/N)? ");
-            if (isConfirmed) {
-                String sql = "UPDATE CUSTOMER SET EMAIL = ? WHERE NRIC = ? ";
-                try {
-                    pstmt = GetConn.getPreparedStatement(sql);
-                    pstmt.setString(1, newEmail);
-                    pstmt.setString(2, nric);
-                    pstmt.execute();
-                    System.out.println("Email Updated to: " + newEmail);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                break;
-            } else {
-                boolean retry = promptConfirmation(scanner, "Continue to edit? (Y/N)");
-                if (!retry) {
-                    break;
-                }
-            }
+            break;
         } while (true);
     }
 
