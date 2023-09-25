@@ -49,6 +49,6 @@ public class TellerLogin {
                 GetConn.closeConn();
             }
         }
-        TellerMenu.displayTeller(scanner, password);
+        TellerMenu.displayTeller(scanner);
     }
 }
