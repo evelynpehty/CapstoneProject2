@@ -52,7 +52,7 @@ public class ExistingCustomer {
                     CreateAccount.show(scanner, nric);
                     break;
                 case 2:
-                    // DisplayAccountsPage(scanner,nric);
+                    DisplayAccountsPage.show(scanner, nric);
                     break;
                 case 3:
                     // EditCustomerDetails.show(scanner,nric);

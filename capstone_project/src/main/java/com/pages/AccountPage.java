@@ -2,6 +2,7 @@ package com.pages;
 
 import java.util.Scanner;
 
+import com.styles.Console;
 import com.validations.MenuChoices;
 
 import objects.Account;
@@ -27,13 +28,14 @@ public class AccountPage {
         boolean exit = false;
 
         while (!exit) {
+            Console.clear();
             System.out.println("This is your " + account.getType() + " account " + account.getId() + "...");
             int n = AccountPage.show();
             int choice = MenuChoices.getUserChoice(scanner, n);
 
             switch (choice) {
                 case 1:
-                    account.viewBalance();
+                    account.viewBalance(scanner);
                     break;
                 case 2:
                     account.deposit(scanner);
@@ -45,7 +47,7 @@ public class AccountPage {
                     account.transfer(scanner);
                     break;
                 case 5:
-                    account.viewTransaction();
+                    account.viewTransaction(scanner);
                     break;
                 case 6:
                     account.toggleActive(scanner);

@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import com.essentials.GetConn;
+import com.styles.Console;
 import com.validations.MenuChoices;
 import com.validations.Validation;
 
@@ -88,11 +89,14 @@ public class Account {
         this.active = active;
     }
 
-    public void viewBalance(){
+    public void viewBalance(Scanner scanner){
+        Console.clear();
         System.out.println("Your " + this.getType() + " account " + this.getId() + " balance is: " + this.getBalance());
+        Console.pause(scanner);
     }
 
     public void deposit(Scanner scanner){
+        Console.clear();
         if (!this.isActive()) {
             System.out.println("This account is inactive. Please activate it before making a deposit.");
         } else {
@@ -124,9 +128,11 @@ public class Account {
                 System.err.println("Error occurred while depositing.");
             }
         }
+        Console.pause(scanner);
     }
 
     public void withdraw(Scanner scanner){
+        Console.clear();
         if (!this.isActive()) {
             System.out.println("This account is inactive. Please activate it before making a withdrawal.");
         } else {
@@ -163,9 +169,11 @@ public class Account {
                 }
             }
         }
+        Console.pause(scanner);
     }
 
     public void transfer(Scanner scanner) {
+        Console.clear();
         if (!this.isActive()) {
             System.out.println("This account is inactive. Please activate it before making a transfer");
         } else {
@@ -215,6 +223,7 @@ public class Account {
                 }
             }
         }
+        Console.pause(scanner);
     }
 
     private Account getAccount(int id) {
@@ -235,6 +244,7 @@ public class Account {
     }
 
     public void toggleActive(Scanner scanner) {
+        Console.clear();
         System.out.println("This account is " + (this.isActive() ? "active" : "inactive") + " now.");
         System.out.print("Do you want to " + (this.isActive() ? "deactivate" : "activate") + " it (Y/N)? ");
         boolean toggle = MenuChoices.yesnoConfirmation(scanner, "");
@@ -255,9 +265,11 @@ public class Account {
             }
             GetConn.closeConn();
         }
+        Console.pause(scanner);
     }
 
-    public void viewTransaction() {
+    public void viewTransaction(Scanner scanner) {
+        Console.clear();
         PreparedStatement statement = GetConn.getPreparedStatement("SELECT * FROM transaction WHERE account_id = ? OR transaction_party_accountid = ? ORDER BY transaction_datetime DESC");
         try {
             statement.setInt(1, this.getId());
@@ -277,5 +289,6 @@ public class Account {
             System.err.println("Error occurred while retrieving the transaction history.");
         }
         GetConn.closeConn();
+        Console.pause(scanner);
     }
 }
