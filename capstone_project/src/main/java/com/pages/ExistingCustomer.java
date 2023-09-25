@@ -45,11 +45,11 @@ public class ExistingCustomer {
             System.out.println("3. Edit Customer Details");
             System.out.println("4. Exit");
 
-            choice = MenuChoices.getUserChoice(scanner, 8);
+            choice = MenuChoices.getUserChoice(scanner, 4);
 
             switch (choice) {
                 case 1:
-                    // CreateAccount.show(scanner, nric);
+                    CreateAccount.show(scanner, nric);
                     break;
                 case 2:
                     // DisplayAccountsPage(scanner,nric);
