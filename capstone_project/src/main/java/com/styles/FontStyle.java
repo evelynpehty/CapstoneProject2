@@ -6,4 +6,6 @@ public class FontStyle {
     public static String reset = "\033[0m";
     public static String red = "\033[31m";
     public static String green = "\033[32m";
+    public static String yellow = "\u001B[33m";
+    public static String cyan = "\u001B[36m";
 }
