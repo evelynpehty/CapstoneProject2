@@ -20,10 +20,10 @@ public class TellerMenu {
             choice = MenuChoices.getUserChoice(scanner, 3);
             switch (choice) {
                 case 1:
-                    RegistrationPage.show(scanner);
+                    CreateCustomer.show(scanner);
                     break;
                 case 2:
-                    ExistingCustomers.showAccountsMenu(scanner);
+                    ExistingCustomer.checkExistingCustomer(scanner);
                     break;                   
                 case 3:
                     isExit = MenuChoices.yesnoConfirmation(scanner, "Are you sure you want to exit the application? Y/N: ");
