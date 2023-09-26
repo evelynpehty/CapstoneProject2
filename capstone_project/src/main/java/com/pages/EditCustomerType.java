@@ -27,10 +27,7 @@ public class EditCustomerType {
 
         String currentInformation = "";
         ArrayList<String> editType = new ArrayList<>(2);
-        // add elements to the ArrayList
-        // String[] editType = arrayList.toArray(new String[arrayList.size()]);
-        // ArrayList editType = new ArrayList<>(2);
-        // array editType = [colname, displayname]
+
         int choice;
         boolean isExit = false;
         while (!isExit) {
