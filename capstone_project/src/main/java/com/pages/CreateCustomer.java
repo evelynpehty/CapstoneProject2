@@ -14,6 +14,7 @@ import com.validations.chkDigits;
 import com.validations.chkEmail;
 import com.validations.chkDate;
 import com.essentials.GetConn;
+import com.styles.Console;
 import com.styles.FontStyle;;
 
 public class CreateCustomer {
@@ -211,7 +212,10 @@ public class CreateCustomer {
 
     public static void show(Scanner scanner){
         try {
+            Console.clear();
             // Check if the person is at least 18 years old
+            System.out.println(FontStyle.bold + FontStyle.cyan + "Create New Customer\n" + FontStyle.reset);
+
             if (getAge(scanner).getYears() >= 18) {
                 if(scanNRIC(scanner).next()){
                     System.out.println(FontStyle.red + "Customer Exists!" + FontStyle.reset);
@@ -298,7 +302,7 @@ public class CreateCustomer {
             } else {
                 System.out.println(FontStyle.red + "Unable to Create Customer. He/she must be atleast 18 years old." + FontStyle.reset);
             }
-            
+            Console.pause(scanner);
         } catch (SQLException se) {
             System.out.println(FontStyle.red + se.getMessage() + FontStyle.reset);
         } finally{
