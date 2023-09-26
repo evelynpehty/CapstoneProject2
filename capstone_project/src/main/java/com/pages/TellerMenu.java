@@ -8,6 +8,7 @@ import com.validations.MenuChoices;
 public class TellerMenu {
     
     public static void displayTeller(Scanner scanner) {
+        Console.clear();
         int choice;
         boolean isExit = false;
         while (!isExit) {

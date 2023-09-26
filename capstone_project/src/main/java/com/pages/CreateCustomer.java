@@ -213,7 +213,6 @@ public class CreateCustomer {
     public static void show(Scanner scanner){
         try {
             Console.clear();
-            // Check if the person is at least 18 years old
             System.out.println(FontStyle.bold + FontStyle.cyan + "Create New Customer\n" + FontStyle.reset);
 
             if (getAge(scanner).getYears() >= 18) {
