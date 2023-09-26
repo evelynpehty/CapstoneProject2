@@ -19,17 +19,32 @@ INSERT INTO ACCOUNTTYPE (account_type, account_description)
 VALUES ('Fixed Deposit', 'Fixed Deposit Account');
 
 -- Insert dummy data into the ACCOUNT table
-INSERT INTO ACCOUNT (account_id, nric, account_balance, account_type)
-VALUES (1, 'A1234567Z', 1000.00, 'Savings');
-INSERT INTO ACCOUNT (account_id, nric, account_balance, account_type)
-VALUES (2, 'A1234567Z', 400.00, 'Checking');
-INSERT INTO ACCOUNT (account_id, nric, account_balance, account_type)
-VALUES (3, 'B9876543Q', 7000.00, 'Savings');
+INSERT INTO ACCOUNT (account_id, nric, account_balance, account_created_date, account_type)
+VALUES (account_id_seq.NEXTVAL, 'A1234567Z', 1200.00, TO_DATE('2023-08-15', 'YYYY-MM-DD'), 'Savings');
+INSERT INTO ACCOUNT (account_id, nric, account_balance, account_created_date, account_type)
+VALUES (account_id_seq.NEXTVAL, 'B9876543Q', 4000.00, TO_DATE('2023-08-20', 'YYYY-MM-DD'), 'Savings');
+INSERT INTO ACCOUNT (account_id, nric, account_balance, account_created_date, account_type)
+VALUES (account_id_seq.NEXTVAL, 'A1234567Z', 6200.00, TO_DATE('2023-08-30', 'YYYY-MM-DD'), 'Checking');
+INSERT INTO ACCOUNT (account_id, nric, account_balance, account_created_date, account_type)
+VALUES (account_id_seq.NEXTVAL, 'B9876543Q', 2500.00, TO_DATE('2023-09-20', 'YYYY-MM-DD'), 'Fixed Deposit');
 
 -- Insert dummy data into the TRANSACTION table
-INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value)
-VALUES (1, 1, 'Deposit', 500.00);
-INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value, transaction_party_accountid)
-VALUES (2, 2, 'Transfer', 500.00, 3);
-INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value)
-VALUES (3, 3, 'Withdraw', 500.00);
+INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value, transaction_datetime)
+VALUES (transaction_id_seq.NEXTVAL, 1, 'Deposit', 2000.00, TO_DATE('2023-08-22', 'YYYY-MM-DD'));
+INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value, transaction_datetime)
+VALUES (transaction_id_seq.NEXTVAL, 2, 'Deposit', 5000.00, TO_DATE('2023-08-25', 'YYYY-MM-DD'));
+INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value, transaction_datetime, transaction_party_accountid)
+VALUES (transaction_id_seq.NEXTVAL, 1, 'Transfer', 500.00, TO_DATE('2023-08-29', 'YYYY-MM-DD'), 2);
+INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value, transaction_datetime)
+VALUES (transaction_id_seq.NEXTVAL, 3, 'Deposit', 6000.00, TO_DATE('2023-09-01', 'YYYY-MM-DD'));
+INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value, transaction_datetime)
+VALUES (transaction_id_seq.NEXTVAL, 1, 'Withdraw', 300.00, TO_DATE('2023-09-05', 'YYYY-MM-DD'));
+INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value, transaction_datetime)
+VALUES (transaction_id_seq.NEXTVAL, 3, 'Withdraw', 800.00, TO_DATE('2023-09-15', 'YYYY-MM-DD'));
+INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value, transaction_datetime, transaction_party_accountid)
+VALUES (transaction_id_seq.NEXTVAL, 2, 'Transfer', 1000.00, TO_DATE('2023-09-22', 'YYYY-MM-DD'), 3);
+INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value, transaction_datetime, transaction_party_accountid)
+VALUES (transaction_id_seq.NEXTVAL, 2, 'Transfer', 500.00, TO_DATE('2023-09-23', 'YYYY-MM-DD'), 4);
+INSERT INTO TRANSACTION (transaction_id, account_id, transaction_type, transaction_value, transaction_datetime)
+VALUES (transaction_id_seq.NEXTVAL, 4, 'Deposit', 2000.00, TO_DATE('2023-09-25', 'YYYY-MM-DD'));
+COMMIT;
