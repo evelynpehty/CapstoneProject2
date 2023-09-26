@@ -10,6 +10,7 @@ import com.validations.chkText;
 import com.validations.chkDigits;
 import com.validations.chkEmail;
 import com.essentials.GetConn;
+import com.styles.Console;
 import com.styles.FontStyle;
 import com.validations.MenuChoices;
 
@@ -31,6 +32,7 @@ public class EditCustomerType {
         int choice;
         boolean isExit = false;
         while (!isExit) {
+            Console.clear();
             boolean isEmail = false;
             try {
                 stmt.setString(1, nric);
@@ -51,8 +53,9 @@ public class EditCustomerType {
                 return; // Exit on database error
             }
 
-            System.out.printf("%1s %-8s %n", "",
-                    FontStyle.bold + FontStyle.UNDERLINE + "Customer Details: " + FontStyle.reset);
+            System.out.println(
+                    FontStyle.bold + FontStyle.UNDERLINE + "Customer Details" + FontStyle.reset);
+            System.out.println(FontStyle.yellow + "Please select an action from the following list." + FontStyle.reset);
             System.out.println("+---+-------------------+--------------------+");
             System.out.printf("| %1s | %-30s | %-31s |%n", "",
                     FontStyle.bold + FontStyle.green + "NRIC" + FontStyle.reset,
@@ -78,7 +81,6 @@ public class EditCustomerType {
             System.out.println(FontStyle.reset + "+---+-------------------+--------------------+");
 
             choice = MenuChoices.getUserChoice(scanner, 6);
-
             switch (choice) {
                 case 1:
                     editType.add(0, "FIRST_NAME");
@@ -128,12 +130,14 @@ public class EditCustomerType {
 
     private static void ModifyInfor(String nric, Scanner scanner, String currentInformation, ArrayList<String> editType,
             boolean isEmail) {
+
         PreparedStatement pstmt;
         do {
             System.out.println(FontStyle.blue + "Current Information: " + currentInformation + FontStyle.reset);
             System.out.println("Enter new Information: ");
 
             while (true) {
+
                 String NewInfor = scanner.nextLine();
                 boolean isConfirmed = promptConfirmation(scanner,
                         FontStyle.green + FontStyle.BOLD + "Confirm changes (Y/N)? " + FontStyle.reset);
@@ -186,7 +190,8 @@ public class EditCustomerType {
             } else if (res.equals("N")) {
                 return false;
             } else {
-                System.out.println("Invalid input.Please select 'Y' or 'N'.");
+                System.out.println(
+                        FontStyle.red + FontStyle.bold + "Invalid input.Please select 'Y' or 'N'." + FontStyle.reset);
             }
         }
     }
