@@ -17,12 +17,27 @@ public class CreateAccount {
         boolean isExit = false;
 
         while (!isExit) {
-            System.out.println("Please select from the following options");
-            System.out.println("-----------------------------------------");
-            System.out.println("1. Savings Account");
-            System.out.println("2. Checking Account");
-            System.out.println("3. Fixed Deposit Account");
-            System.out.println("4. Back");
+            System.out.println(FontStyle.bold + FontStyle.yellow + "----------------------------------------------"
+                    + FontStyle.reset);
+            System.out.println(FontStyle.bold + FontStyle.yellow + "||" + FontStyle.reset + FontStyle.bold + FontStyle.cyan
+                    + " Please select from the following options " + FontStyle.reset + FontStyle.bold + FontStyle.yellow
+                    + "||" + FontStyle.reset);
+            System.out.println(FontStyle.bold + FontStyle.yellow + "||------------------------------------------||"
+                    + FontStyle.reset);
+            System.out.println(FontStyle.bold + FontStyle.yellow + "||" + FontStyle.reset + FontStyle.green
+                    + " 1. Savings Account                       " + FontStyle.reset + FontStyle.bold + FontStyle.yellow
+                    + "||" + FontStyle.reset);
+            System.out.println(FontStyle.bold + FontStyle.yellow + "||" + FontStyle.reset + FontStyle.blue
+                    + " 2. Checking Account                      " + FontStyle.reset + FontStyle.bold + FontStyle.yellow
+                    + "||" + FontStyle.reset);
+            System.out.println(FontStyle.bold + FontStyle.yellow + "||" + FontStyle.reset + FontStyle.purple
+                    + " 3. Fixed Deposit Account                 " + FontStyle.reset + FontStyle.bold + FontStyle.yellow
+                    + "||" + FontStyle.reset);
+            System.out.println(FontStyle.bold + FontStyle.yellow + "||" + FontStyle.reset + FontStyle.red
+                    + " 4. Back                                  " + FontStyle.reset + FontStyle.bold + FontStyle.yellow
+                    + "||" + FontStyle.reset);
+            System.out.println(FontStyle.bold + FontStyle.yellow + "----------------------------------------------"
+                    + FontStyle.reset);
 
             PreparedStatement pstmt;
             ResultSet resultSet;
@@ -77,9 +92,18 @@ public class CreateAccount {
                         pstmt.setString(2, acctType);
                         resultSet = pstmt.executeQuery();
                         resultSet.next();
-                        System.out.println(FontStyle.green + acctType + " Account Created! " + FontStyle.reset);
-                        System.out.print(FontStyle.cyan + acctType + " Account ID: " + FontStyle.reset);
-                        System.out.println(FontStyle.yellow + FontStyle.bold +  resultSet.getInt(1) + FontStyle.reset);
+                        System.out.printf("%s%s%s%s%n", FontStyle.bold, FontStyle.yellow,
+                                "----------------------------------------------", FontStyle.reset);
+                        System.out.printf("%s%s||%s %s%-40s%s %s%s||%s %n", FontStyle.bold, FontStyle.yellow,
+                                FontStyle.reset, FontStyle.green, acctType + " Account Created!",
+                                FontStyle.reset, FontStyle.bold, FontStyle.yellow,
+                                FontStyle.reset);
+                        System.out.printf("%s%s||%s %s%s%-40s%s %s%s||%s %n", FontStyle.bold, FontStyle.yellow,
+                                FontStyle.reset, FontStyle.bold, FontStyle.green,
+                                acctType + " Account ID: " + resultSet.getInt(1), FontStyle.reset, FontStyle.bold,
+                                FontStyle.yellow, FontStyle.reset);
+                        System.out.printf("%s%s%s%s%n", FontStyle.bold, FontStyle.yellow,
+                                "----------------------------------------------", FontStyle.reset);
                         GetConn.closeConn();
                         GetConn.closeConn();
                         GetConn.closeConn();
@@ -87,9 +111,20 @@ public class CreateAccount {
                         isExit = true;
                         break;
                     } else {
-                        System.out.println(FontStyle.red + acctType + " Account exists already!" + FontStyle.reset);
-                        System.out.print(FontStyle.cyan + acctType + " Account ID: " + FontStyle.reset);
-                        System.out.println(FontStyle.yellow + FontStyle.bold + resultSet.getInt(1) + FontStyle.reset);
+
+                        System.out.printf("%s%s%s%s%n", FontStyle.bold, FontStyle.yellow,
+                                "----------------------------------------------", FontStyle.reset);
+                        System.out.printf("%s%s||%s %s%-40s%s %s%s||%s %n", FontStyle.bold, FontStyle.yellow,
+                                FontStyle.reset, FontStyle.red, acctType + " Account Exists!", FontStyle.reset,
+                                FontStyle.bold, FontStyle.yellow,
+                                FontStyle.reset);
+                        System.out.printf("%s%s||%s %s%s%-40s%s %s%s||%s %n", FontStyle.bold, FontStyle.yellow,
+                                FontStyle.reset, FontStyle.bold, FontStyle.red,
+                                acctType + " Account ID: " + resultSet.getInt(1), FontStyle.reset, FontStyle.bold,
+                                FontStyle.yellow, FontStyle.reset);
+                        System.out.printf("%s%s%s%s%n", FontStyle.bold, FontStyle.yellow,
+                                "----------------------------------------------", FontStyle.reset);
+
                         GetConn.closeConn();
                         break;
                     }
