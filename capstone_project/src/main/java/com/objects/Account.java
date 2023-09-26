@@ -1,4 +1,4 @@
-package objects;
+package com.objects;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
