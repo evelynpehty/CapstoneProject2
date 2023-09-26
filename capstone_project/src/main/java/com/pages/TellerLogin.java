@@ -9,12 +9,12 @@ import com.essentials.GetConn;
 import com.styles.FontStyle;
 
 public class TellerLogin {
-    
-    public static void login(Scanner scanner){
+
+    public static void login(Scanner scanner) {
         String username;
         String password;
         PreparedStatement pStmt;
-        //boolean isExit = false;
+        // boolean isExit = false;
         System.out.print("Enter your teller username: ");
         username = scanner.nextLine();
 
@@ -22,8 +22,8 @@ public class TellerLogin {
         System.out.print(FontStyle.hide); // Hide input
         password = scanner.nextLine();
         System.out.print(FontStyle.reset); // Show input
-        
-        while (true){
+
+        while (true) {
             try {
                 String sqlQuery = "SELECT * FROM teller where UPPER(teller_username) = UPPER(?) and teller_password = ?";
                 pStmt = GetConn.getPreparedStatement(sqlQuery);
@@ -31,10 +31,9 @@ public class TellerLogin {
                 pStmt.setString(2, password);
                 ResultSet resultSet = pStmt.executeQuery();
 
-                if(resultSet.next()){
+                if (resultSet.next()) {
                     break;
-                }
-                else{
+                } else {
                     System.out.println(FontStyle.red + "Incorrect login credential!" + FontStyle.reset);
                     System.out.print("Enter your teller username: ");
                     username = scanner.nextLine();
@@ -46,7 +45,7 @@ public class TellerLogin {
                 }
             } catch (SQLException se) {
                 System.out.println(se.getMessage());
-            } finally{
+            } finally {
                 GetConn.closeConn();
             }
         }
