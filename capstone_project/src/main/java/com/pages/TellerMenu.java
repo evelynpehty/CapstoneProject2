@@ -2,14 +2,17 @@ package com.pages;
 
 import java.util.Scanner;
 
+import com.styles.Console;
 import com.validations.MenuChoices;
 
 public class TellerMenu {
     
     public static void displayTeller(Scanner scanner) {
+        Console.clear();
         int choice;
         boolean isExit = false;
         while (!isExit) {
+            Console.clear();
             System.out.println("----------------------------");
             System.out.println("Welcome to the Bank Teller");
             System.out.println("----------------------------");
