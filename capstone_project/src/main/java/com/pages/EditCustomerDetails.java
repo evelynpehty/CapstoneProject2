@@ -146,7 +146,7 @@ public class EditCustomerDetails {
 
                     break;
                 } else {
-                    boolean retry = promptConfirmation(scanner, "Continue to edit? (Y/N)");
+                    boolean retry = promptConfirmation(scanner, "Continue to edit " + editType + " ? (Y/N)");
                     if (!retry) {
                         break;
                     }
