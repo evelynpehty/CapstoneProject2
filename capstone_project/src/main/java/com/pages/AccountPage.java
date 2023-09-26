@@ -3,6 +3,7 @@ package com.pages;
 import java.util.Scanner;
 
 import com.styles.Console;
+import com.styles.FontStyle;
 import com.validations.MenuChoices;
 
 import objects.Account;
@@ -12,13 +13,13 @@ public class AccountPage {
         int n = 7;
 
         System.out.println("Please select an action from the following list.");
-        System.out.println("1. View balance");
+        System.out.println(FontStyle.blue + "1. View balance");
         System.out.println("2. Deposit fund");
         System.out.println("3. Withdraw fund");
         System.out.println("4. Transfer fund");
         System.out.println("5. View transaction history");
         System.out.println("6. Activate/Deactivate account");
-        System.out.println("7. Back to list of accounts");
+        System.out.println("7. Back to list of accounts" + FontStyle.reset);
 
         return n;
     }
@@ -29,7 +30,7 @@ public class AccountPage {
 
         while (!exit) {
             Console.clear();
-            System.out.println("This is your " + account.getType() + " account " + account.getId() + "...");
+            System.out.println(FontStyle.cyan + "This is your " + account.getType() + " account " + account.getId() + "..." + FontStyle.reset);
             int n = AccountPage.show();
             int choice = MenuChoices.getUserChoice(scanner, n);
 

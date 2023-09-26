@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import com.essentials.GetConn;
 import com.styles.Console;
+import com.styles.FontStyle;
 import com.validations.MenuChoices;
 import com.validations.Validation;
 
@@ -91,7 +92,7 @@ public class Account {
 
     public void viewBalance(Scanner scanner){
         Console.clear();
-        System.out.println("Your " + this.getType() + " account " + this.getId() + " balance is: " + this.getBalance());
+        System.out.println(FontStyle.green + "Your " + this.getType() + " account " + this.getId() + " balance is: " + this.getBalance() + FontStyle.reset);
         Console.pause(scanner);
     }
 
@@ -102,7 +103,7 @@ public class Account {
         } else {
             System.out.println("Deposit fund into this account...");
             System.out.println("Please enter the following details.");
-            System.out.print("Enter the amount to deposit: ");
+            System.out.print(FontStyle.blue + "Enter the amount to deposit: " + FontStyle.reset);
             double amount = Validation.validateDouble(scanner);
             this.setBalance(this.getBalance() + amount);
     
@@ -123,7 +124,7 @@ public class Account {
                 stmt.executeUpdate();
                 GetConn.closeConn();
     
-                System.out.println("Successfully deposited $" + amount);
+                System.out.println(FontStyle.green + "Successfully deposited $" + amount + FontStyle.reset);
             } catch (SQLException e) {
                 System.err.println("Error occurred while depositing.");
             }
@@ -134,15 +135,15 @@ public class Account {
     public void withdraw(Scanner scanner){
         Console.clear();
         if (!this.isActive()) {
-            System.out.println("This account is inactive. Please activate it before making a withdrawal.");
+            System.out.println(FontStyle.red + "This account is inactive. Please activate it before making a withdrawal." + FontStyle.reset);
         } else {
             System.out.println("Withdraw fund from this account...");
             System.out.println("Please enter the following details.");
-            System.out.print("Enter the amount to withdraw: ");
+            System.out.print(FontStyle.blue + "Enter the amount to withdraw: " + FontStyle.reset);
             double amount = Validation.validateDouble(scanner);
     
             if (amount > this.getBalance()){
-                System.out.println("Insufficient fund. Returning to account...");
+                System.out.println(FontStyle.red + "Insufficient fund. Returning to account..." + FontStyle.reset);
             } else {
                 this.setBalance(this.getBalance() - amount);
     
@@ -163,9 +164,9 @@ public class Account {
                     stmt.executeUpdate();
                     GetConn.closeConn();
     
-                    System.out.println("Successfully withdrew $" + amount);
+                    System.out.println(FontStyle.green + "Successfully withdrew $" + amount + FontStyle.reset);
                 } catch (SQLException e) {
-                    System.err.println("Error occurred while withdrawing.");
+                    System.err.println(FontStyle.red + "Error occurred while withdrawing." + FontStyle.reset);
                 }
             }
         }
@@ -175,23 +176,23 @@ public class Account {
     public void transfer(Scanner scanner) {
         Console.clear();
         if (!this.isActive()) {
-            System.out.println("This account is inactive. Please activate it before making a transfer");
+            System.out.println(FontStyle.red + "This account is inactive. Please activate it before making a transfer" + FontStyle.reset);
         } else {
             System.out.println("Transfer fund to another account...");
             System.out.println("Please enter the following details.");
-            System.out.print("Enter the payee's account ID: ");
+            System.out.print(FontStyle.blue + "Enter the payee's account ID: " + FontStyle.reset); 
             Account payee = getAccount(Validation.validateInt(scanner));
     
             if (Objects.isNull(payee)) {
-                System.out.println("Account ID could not be found.");
+                System.out.println(FontStyle.red + "Account ID could not be found." + FontStyle.reset);
             } else if (!payee.isActive()) {
-                System.out.println("The payee's account is inactive. Fund cannot be transferred to the account.");
+                System.out.println(FontStyle.red + "The payee's account is inactive. Fund cannot be transferred to the account." + FontStyle.reset);
             } else {
-                System.out.print("Enter the amount to transfer: ");
+                System.out.print(FontStyle.blue + "Enter the amount to transfer: " + FontStyle.reset);
                 double amount = Validation.validateDouble(scanner);
     
                 if (amount > this.getBalance()) {
-                    System.out.println("Insufficient fund. Returning to account...");
+                    System.out.println(FontStyle.red + "Insufficient fund. Returning to account..." + FontStyle.reset);
                 } else {
                     this.setBalance(this.getBalance() - amount);
                     payee.setBalance(payee.getBalance() + amount);
@@ -215,10 +216,9 @@ public class Account {
                         statement.executeUpdate();
                         GetConn.closeConn();
     
-                        System.out.println("Fund has been transferred successfully.");
+                        System.out.println(FontStyle.green + "Fund has been transferred successfully." + FontStyle.reset);
                     } catch (SQLException e) {
-                        // TODO: handle exception
-                        System.err.println("Error occurred while transferring.");
+                        System.err.println(FontStyle.red + "Error occurred while transferring." + FontStyle.reset);
                     }
                 }
             }
@@ -246,7 +246,7 @@ public class Account {
     public void toggleActive(Scanner scanner) {
         Console.clear();
         System.out.println("This account is " + (this.isActive() ? "active" : "inactive") + " now.");
-        System.out.print("Do you want to " + (this.isActive() ? "deactivate" : "activate") + " it (Y/N)? ");
+        System.out.print(FontStyle.blue + "Do you want to " + (this.isActive() ? "deactivate" : "activate") + " it (Y/N)? " + FontStyle.reset);
         boolean toggle = MenuChoices.yesnoConfirmation(scanner, "");
 
         if (toggle) {
@@ -258,10 +258,10 @@ public class Account {
                 statement.setInt(2, this.getId());
                 statement.executeUpdate();
 
-                System.out.println("This account has been " + (this.isActive() ? "activated" : "deactivated") + " successfully.");
+                System.out.println(FontStyle.green + "This account has been " + (this.isActive() ? "activated" : "deactivated") + " successfully." + FontStyle.reset);
             } catch (SQLException e) {
                 // TODO: handle exception
-                System.err.println("Error occurred while changing the status of account.");
+                System.err.println(FontStyle.red + "Error occurred while changing the status of account." + FontStyle.reset);
             }
             GetConn.closeConn();
         }
@@ -286,7 +286,7 @@ public class Account {
             }
         } catch (SQLException e) {
             // TODO: handle exception
-            System.err.println("Error occurred while retrieving the transaction history.");
+            System.err.println(FontStyle.red + "Error occurred while retrieving the transaction history." + FontStyle.reset);
         }
         GetConn.closeConn();
         Console.pause(scanner);

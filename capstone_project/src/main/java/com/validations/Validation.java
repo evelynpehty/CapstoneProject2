@@ -3,6 +3,8 @@ package com.validations;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import com.styles.FontStyle;
+
 public class Validation {
     public static double validateDouble(Scanner scanner) {
         while (true) {
@@ -12,7 +14,7 @@ public class Validation {
                 return input;
             } catch (InputMismatchException e) {
                 scanner.nextLine();
-                System.out.print("Invalid input. Please try again: ");
+                System.out.print(FontStyle.red + "Invalid input. Please try again: "+ FontStyle.reset);
             }
         }
     }
@@ -26,7 +28,7 @@ public class Validation {
             } catch (InputMismatchException e) {
                 // TODO: handle exception
                 scanner.nextLine();
-                System.out.print("Invalid input. Please try again: ");
+                System.out.print(FontStyle.red + "Invalid input. Please try again: " + FontStyle.reset);
             }
         }
     }

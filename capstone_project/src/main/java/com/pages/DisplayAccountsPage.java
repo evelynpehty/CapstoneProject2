@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.essentials.GetConn;
+import com.styles.FontStyle;
 import com.validations.MenuChoices;
 
 public class DisplayAccountsPage {
@@ -16,7 +17,7 @@ public class DisplayAccountsPage {
 
         while (!isExit) {
             int count = 1;
-            System.out.println("Please select from the following options");
+            System.out.println(FontStyle.yellow + "Please select from the following options" + FontStyle.reset);
             System.out.println("-----------------------------------------");
             
             String sql = "SELECT account_id, account_type FROM account WHERE nric = upper(?)";
@@ -28,7 +29,7 @@ public class DisplayAccountsPage {
                 stmt.setString(1, nric);
                 resultSet = stmt.executeQuery();
                 while (resultSet.next()) {
-                    System.out.println(count + ". " 
+                    System.out.println(FontStyle.blue + count + ". " 
                     + resultSet.getString(2) 
                     + " - " + resultSet.getInt(1)); 
 
@@ -39,10 +40,10 @@ public class DisplayAccountsPage {
                 e.printStackTrace();
             }
             GetConn.closeConn();
-            System.out.println(count + ". Back");
+            System.out.println(count + ". Back" + FontStyle.reset);
             choice = MenuChoices.getUserChoice(scanner, count);
             if (choice < count){
-                System.out.println("Account selected: " + accounts.get(choice - 1));
+                System.out.println(FontStyle.green + "Account selected: " + accounts.get(choice - 1) + FontStyle.reset);
                 AccountPage.run(scanner, accounts.get(choice - 1));
             } else {
                 isExit = true;
