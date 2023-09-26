@@ -9,4 +9,5 @@ public class FontStyle {
     public static String yellow = "\u001B[33m";
     public static String cyan = "\u001B[36m";
     public static String blue = "\u001B[34m";
+    public static String purple = "\u001B[35m";
 }

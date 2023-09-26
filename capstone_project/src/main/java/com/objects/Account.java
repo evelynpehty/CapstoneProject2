@@ -92,14 +92,14 @@ public class Account {
 
     public void viewBalance(Scanner scanner){
         Console.clear();
-        System.out.println(FontStyle.green + "Your " + this.getType() + " account " + this.getId() + " balance is: " + this.getBalance() + FontStyle.reset);
+        System.out.println("Your " + this.getType() + " account " + this.getId() + " balance is: " + FontStyle.green + this.getBalance() + FontStyle.reset);
         Console.pause(scanner);
     }
 
     public void deposit(Scanner scanner){
         Console.clear();
         if (!this.isActive()) {
-            System.out.println("This account is inactive. Please activate it before making a deposit.");
+            System.out.println(FontStyle.red + "This account is inactive. Please activate it before making a deposit." + FontStyle.reset);
         } else {
             System.out.println("Deposit fund into this account...");
             System.out.println("Please enter the following details.");
@@ -126,7 +126,7 @@ public class Account {
     
                 System.out.println(FontStyle.green + "Successfully deposited $" + amount + FontStyle.reset);
             } catch (SQLException e) {
-                System.err.println("Error occurred while depositing.");
+                System.err.println(FontStyle.red + "Error occurred while depositing." + FontStyle.reset);
             }
         }
         Console.pause(scanner);
@@ -245,8 +245,8 @@ public class Account {
 
     public void toggleActive(Scanner scanner) {
         Console.clear();
-        System.out.println("This account is " + (this.isActive() ? "active" : "inactive") + " now.");
-        System.out.print(FontStyle.blue + "Do you want to " + (this.isActive() ? "deactivate" : "activate") + " it (Y/N)? " + FontStyle.reset);
+        System.out.println("This account is " + (this.isActive() ? FontStyle.green + "active" : FontStyle.red + "inactive") + FontStyle.reset + " now.");
+        System.out.print("Do you want to " + (this.isActive() ? FontStyle.red + "deactivate" : FontStyle.green + "activate") + FontStyle.reset + " it (Y/N)? ");
         boolean toggle = MenuChoices.yesnoConfirmation(scanner, "");
 
         if (toggle) {
@@ -258,7 +258,7 @@ public class Account {
                 statement.setInt(2, this.getId());
                 statement.executeUpdate();
 
-                System.out.println(FontStyle.green + "This account has been " + (this.isActive() ? "activated" : "deactivated") + " successfully." + FontStyle.reset);
+                System.out.println("This account has been " + (this.isActive() ? FontStyle.green + "activated" : FontStyle.red + "deactivated") + FontStyle.reset + " successfully.");
             } catch (SQLException e) {
                 // TODO: handle exception
                 System.err.println(FontStyle.red + "Error occurred while changing the status of account." + FontStyle.reset);
@@ -276,13 +276,22 @@ public class Account {
             statement.setInt(2, this.getId());
             ResultSet resultSet = statement.executeQuery();
 
-            System.out.printf("%15s | %-6s | %10s | %15s | %15s | %15s|%n", "Transaction ID", "ID", "Type", "Value", "Date", "Third Party ID");
+            System.out.printf(FontStyle.bold + FontStyle.purple + "%15s | %-6s | %10s | %15s | %15s | %15s|%n" + FontStyle.reset, "Transaction ID", "ID", "Type", "Value", "Date", "Third Party ID");
             while (resultSet.next()) {
-                System.out.printf(
-                    "%15d | %-6d | %10S | %15.2f | %15s | %15d|%n", resultSet.getInt("transaction_id"), resultSet.getInt("account_id"),
-                    resultSet.getString("transaction_type"), resultSet.getDouble("transaction_value"),
-                    resultSet.getDate("transaction_datetime").toLocalDate(), resultSet.getInt("transaction_party_accountid")
-                );
+                int payee_id = resultSet.getInt("transaction_party_accountid");
+                if (payee_id == 0) {
+                    System.out.printf(
+                        FontStyle.cyan + "%15d | %-6d | %10S | %15.2f | %15s | %15s|%n" + FontStyle.reset, resultSet.getInt("transaction_id"), resultSet.getInt("account_id"),
+                        resultSet.getString("transaction_type"), resultSet.getDouble("transaction_value"), resultSet.getDate("transaction_datetime").toLocalDate(),
+                        "NA"
+                    );
+                } else {
+                    System.out.printf(
+                        FontStyle.cyan + "%15d | %-6d | %10S | %15.2f | %15s | %15d|%n" + FontStyle.reset, resultSet.getInt("transaction_id"), resultSet.getInt("account_id"),
+                        resultSet.getString("transaction_type"), resultSet.getDouble("transaction_value"), resultSet.getDate("transaction_datetime").toLocalDate(),
+                        payee_id
+                    );
+                }
             }
         } catch (SQLException e) {
             // TODO: handle exception
