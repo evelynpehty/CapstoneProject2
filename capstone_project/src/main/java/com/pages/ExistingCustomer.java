@@ -55,7 +55,7 @@ public class ExistingCustomer {
                     // DisplayAccountsPage(scanner,nric);
                     break;
                 case 3:
-                    EditCustomerDetails.show(scanner, nric);
+                    EditCustomerType.show(scanner, nric);
                     // EditCustomerDetails.show(scanner,nric);
                     break;
                 case 4:

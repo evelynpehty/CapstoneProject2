@@ -3,6 +3,7 @@ package com.pages;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.validations.chkText;
@@ -12,7 +13,7 @@ import com.essentials.GetConn;
 import com.styles.FontStyle;
 import com.validations.MenuChoices;
 
-public class EditCustomerDetails {
+public class EditCustomerType {
     static String currentFirstName;
     static String currentLastName;
     static String currentPhoneNumber;
@@ -25,7 +26,11 @@ public class EditCustomerDetails {
         PreparedStatement stmt = GetConn.getPreparedStatement(sql);
 
         String currentInformation = "";
-        String editType = "";
+        ArrayList<String> editType = new ArrayList<>(2);
+        // add elements to the ArrayList
+        // String[] editType = arrayList.toArray(new String[arrayList.size()]);
+        // ArrayList editType = new ArrayList<>(2);
+        // array editType = [colname, displayname]
         int choice;
         boolean isExit = false;
         while (!isExit) {
@@ -48,53 +53,68 @@ public class EditCustomerDetails {
                 e.printStackTrace();
                 return; // Exit on database error
             }
-            System.out.println("Hello " + currentFirstName);
-            System.out.println(FontStyle.bold + "Customer Details" + FontStyle.reset);
-            System.out.println("+---+---------------------+---------------------+");
-            System.out.printf("| %1s | %-19s | %-19s |%n", "", "NRIC", nric);
-            System.out.printf("| %1s | %-19s | %-19s |%n", "1", "First Name", currentFirstName);
-            System.out.printf("| %1s | %-19s | %-19s |%n", "2", "Last Name", currentLastName);
-            System.out.printf("| %1s | %-19s | %-19s |%n", "3", "Phone", currentPhoneNumber);
+
+            System.out.printf("%1s %-8s %n", "",
+                    FontStyle.bold + FontStyle.UNDERLINE + "Customer Details: " + FontStyle.reset);
+            System.out.println("+---+-------------------+--------------------+");
+            System.out.printf("| %1s | %-30s | %-31s |%n", "",
+                    FontStyle.bold + FontStyle.green + "NRIC" + FontStyle.reset,
+                    FontStyle.bold + FontStyle.green + nric + FontStyle.reset);
+            System.out.printf("| %1s | %-26s | %-27s |%n", "1", FontStyle.blue + "First Name" + FontStyle.reset,
+                    FontStyle.blue + currentFirstName + FontStyle.reset);
+            System.out.printf("| %1s | %-26s | %-27s |%n", "2", FontStyle.blue + "Last Name" + FontStyle.reset,
+                    FontStyle.blue + currentLastName + FontStyle.reset);
+            System.out.printf("| %1s | %-26s | %-27s |%n", "3", FontStyle.blue + "Phone" + FontStyle.reset,
+                    FontStyle.blue + currentPhoneNumber + FontStyle.reset);
 
             if (currentEmail == null) {
-                System.out.printf("| %1s | %-19s | %-19s |%n", "4", "Email", "");
+                System.out.printf("| %1s | %-26s | %-27s |%n", "4", FontStyle.blue + "Email" + FontStyle.reset,
+                        "" + FontStyle.reset);
             } else {
-                System.out.printf("| %1s | %-19s | %-19s |%n", "4", "Email", currentEmail);
+                System.out.printf("| %1s | %-26s | %-27s |%n", "4", FontStyle.blue + "Email" + FontStyle.reset,
+                        FontStyle.blue + currentEmail + FontStyle.reset);
             }
 
-            System.out.printf("| %1s | %-19s | %-19s |%n", "5", "Nationality", currentNationality);
-            System.out.printf("| %1s | %-19s | %-19s |%n", "6", "Back", "");
-            System.out.println("+---+---------------------+---------------------+");
+            System.out.printf("| %1s | %-26s | %-27s |%n", "5", FontStyle.blue + "Nationality" + FontStyle.reset,
+                    FontStyle.blue + currentNationality + FontStyle.reset);
+            System.out.printf("| %1s | %-26s | %-18s |%n", "6", FontStyle.red + "Back" + FontStyle.reset, "");
+            System.out.println(FontStyle.reset + "+---+-------------------+--------------------+");
 
             choice = MenuChoices.getUserChoice(scanner, 6);
 
             switch (choice) {
                 case 1:
-                    editType = "FIRST_NAME";
+                    editType.add(0, "FIRST_NAME");
+                    editType.add(1, "First Name");
                     currentInformation = currentFirstName;
+
                     ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
                     break;
                 case 2:
-                    editType = "LAST_NAME";
+                    editType.add(0, "LAST_NAME");
+                    editType.add(1, "Last Name");
                     currentInformation = currentLastName;
                     ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
                     break;
 
                 case 3:
-                    editType = "PHONE_NUMBER";
+                    editType.add(0, "PHONE_NUMBER");
+                    editType.add(1, "Phone Number");
                     currentInformation = currentPhoneNumber;
                     ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
                     break;
 
                 case 4:
-                    editType = "EMAIL";
+                    editType.add(0, "EMAIL");
+                    editType.add(1, "Email");
                     currentInformation = currentEmail;
                     isEmail = true;
                     ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
                     break;
 
                 case 5:
-                    editType = "NATIONALITY";
+                    editType.add(0, "NATIONALITY");
+                    editType.add(1, "Nationality");
                     currentInformation = currentNationality;
                     ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
                     break;
@@ -109,44 +129,48 @@ public class EditCustomerDetails {
         }
     }
 
-    private static void ModifyInfor(String nric, Scanner scanner, String currentInformation, String editType,
+    private static void ModifyInfor(String nric, Scanner scanner, String currentInformation, ArrayList<String> editType,
             boolean isEmail) {
         PreparedStatement pstmt;
         do {
-            System.out.println("Current Information: " + currentInformation);
+            System.out.println(FontStyle.blue + "Current Information: " + currentInformation + FontStyle.reset);
             System.out.println("Enter new Information: ");
 
             while (true) {
                 String NewInfor = scanner.nextLine();
-                boolean isConfirmed = promptConfirmation(scanner, "Confirm changes (Y/N)? ");
+                boolean isConfirmed = promptConfirmation(scanner,
+                        FontStyle.green + FontStyle.BOLD + "Confirm changes (Y/N)? " + FontStyle.reset);
                 if (isConfirmed) {
                     boolean isValid = true;
-                    if (editType == "EMAIL") {
+                    if (editType.get(0) == "EMAIL") {
                         isValid = chkEmail.checkEmailFormat(NewInfor);
                     }
-                    if (editType == "PHONE_NUMBER") {
+                    if (editType.get(0) == "PHONE_NUMBER") {
                         isValid = chkDigits.checkDigits(NewInfor);
                     }
 
                     if (!isValid) {
-                        System.out.println("Invalid " + editType + " format. Please enter a valid input.");
+                        System.out.println(FontStyle.BOLD + FontStyle.red + "Invalid " + editType.get(1)
+                                + " format. Please enter a valid input." + FontStyle.reset);
                         continue;
                     }
 
-                    String sql = "UPDATE CUSTOMER SET " + editType + " = ? WHERE NRIC = UPPER(?)";
+                    String sql = "UPDATE CUSTOMER SET " + editType.get(0) + " = ? WHERE NRIC = UPPER(?)";
                     try {
                         pstmt = GetConn.getPreparedStatement(sql);
                         pstmt.setString(1, NewInfor);
                         pstmt.setString(2, nric);
                         pstmt.execute();
-                        System.out.println(editType + " updated to: " + NewInfor);
+                        System.out.println(FontStyle.BOLD + FontStyle.green + editType.get(1) + " updated to: "
+                                + NewInfor + FontStyle.reset);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
 
                     break;
                 } else {
-                    boolean retry = promptConfirmation(scanner, "Continue to edit " + editType + " ? (Y/N)");
+                    boolean retry = promptConfirmation(scanner, "Continue to edit " + editType.get(1) + " ? (Y). "
+                            + FontStyle.red + "To exit (N)." + FontStyle.reset);
                     if (!retry) {
                         break;
                     }
