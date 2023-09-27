@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.validations.chkText;
 import com.validations.chkDigits;
 import com.validations.chkEmail;
 import com.essentials.GetConn;
@@ -45,7 +44,7 @@ public class EditCustomerType {
                     currentEmail = resultSet.getString("EMAIL");
                     currentNationality = resultSet.getString("NATIONALITY");
                 } else {
-                    System.out.println("Customer not found.");
+                    System.out.println(FontStyle.red + FontStyle.bold + "Customer not found." + FontStyle.reset);
                     return; // Exit if customer not found
                 }
             } catch (SQLException e) {
@@ -54,76 +53,72 @@ public class EditCustomerType {
             }
 
             System.out.println(
-                    FontStyle.bold + FontStyle.UNDERLINE + "Customer Details" + FontStyle.reset);
-            System.out.println(FontStyle.yellow + "Please select an action from the following list." + FontStyle.reset);
-            System.out.println("+---+-------------------+--------------------+");
-            System.out.printf("| %1s | %-30s | %-31s |%n", "",
+                    FontStyle.cyan + FontStyle.bold + FontStyle.UNDERLINE + "Customer Details" + FontStyle.reset);
+            System.out.println(
+                    FontStyle.yellow + "Please select an action from the following list." + FontStyle.reset);
+            System.out.println("+---+---------------------+---------------------+");
+            System.out.printf("| %1s | %-32s | %-32s |%n", "",
                     FontStyle.bold + FontStyle.green + "NRIC" + FontStyle.reset,
                     FontStyle.bold + FontStyle.green + nric + FontStyle.reset);
-            System.out.printf("| %1s | %-26s | %-27s |%n", "1", FontStyle.blue + "First Name" + FontStyle.reset,
-                    FontStyle.blue + currentFirstName + FontStyle.reset);
-            System.out.printf("| %1s | %-26s | %-27s |%n", "2", FontStyle.blue + "Last Name" + FontStyle.reset,
-                    FontStyle.blue + currentLastName + FontStyle.reset);
-            System.out.printf("| %1s | %-26s | %-27s |%n", "3", FontStyle.blue + "Phone" + FontStyle.reset,
-                    FontStyle.blue + currentPhoneNumber + FontStyle.reset);
+            System.out.printf("| %1s | %-19s | %-19s |%n", "1", "First Name", currentFirstName);
+            System.out.printf("| %1s | %-19s | %-19s |%n", "2", "Last Name", currentLastName);
+            System.out.printf("| %1s | %-19s | %-19s |%n", "3", "Phone", currentPhoneNumber);
 
             if (currentEmail == null) {
-                System.out.printf("| %1s | %-26s | %-27s |%n", "4", FontStyle.blue + "Email" + FontStyle.reset,
-                        "" + FontStyle.reset);
+                System.out.printf("| %1s | %-19s | %-19s |%n", "4", "Email", "");
             } else {
-                System.out.printf("| %1s | %-26s | %-27s |%n", "4", FontStyle.blue + "Email" + FontStyle.reset,
-                        FontStyle.blue + currentEmail + FontStyle.reset);
-            }
+                System.out.printf("| %1s | %-19s | %-19s |%n", "4", "Email", currentEmail);
+                System.out.printf("| %1s | %-19s | %-19s |%n", "5", "Nationality", currentNationality);
+                System.out.printf("| %1s | %-28s | %-19s |%n", "6", FontStyle.red + "Back" + FontStyle.reset, "");
+                System.out.println("+---+---------------------+---------------------+");
 
-            System.out.printf("| %1s | %-26s | %-27s |%n", "5", FontStyle.blue + "Nationality" + FontStyle.reset,
-                    FontStyle.blue + currentNationality + FontStyle.reset);
-            System.out.printf("| %1s | %-26s | %-18s |%n", "6", FontStyle.red + "Back" + FontStyle.reset, "");
-            System.out.println(FontStyle.reset + "+---+-------------------+--------------------+");
+                choice = MenuChoices.getUserChoice(scanner, 6);
+                switch (choice) {
+                    case 1:
+                        editType.add(0, "FIRST_NAME");
+                        editType.add(1, "First Name");
+                        currentInformation = currentFirstName;
 
-            choice = MenuChoices.getUserChoice(scanner, 6);
-            switch (choice) {
-                case 1:
-                    editType.add(0, "FIRST_NAME");
-                    editType.add(1, "First Name");
-                    currentInformation = currentFirstName;
+                        ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+                        break;
+                    case 2:
+                        editType.add(0, "LAST_NAME");
+                        editType.add(1, "Last Name");
+                        currentInformation = currentLastName;
+                        ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+                        break;
 
-                    ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
-                    break;
-                case 2:
-                    editType.add(0, "LAST_NAME");
-                    editType.add(1, "Last Name");
-                    currentInformation = currentLastName;
-                    ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
-                    break;
+                    case 3:
+                        editType.add(0, "PHONE_NUMBER");
+                        editType.add(1, "Phone Number");
+                        currentInformation = currentPhoneNumber;
+                        ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+                        break;
 
-                case 3:
-                    editType.add(0, "PHONE_NUMBER");
-                    editType.add(1, "Phone Number");
-                    currentInformation = currentPhoneNumber;
-                    ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
-                    break;
+                    case 4:
+                        editType.add(0, "EMAIL");
+                        editType.add(1, "Email");
+                        currentInformation = currentEmail;
+                        isEmail = true;
+                        ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+                        break;
 
-                case 4:
-                    editType.add(0, "EMAIL");
-                    editType.add(1, "Email");
-                    currentInformation = currentEmail;
-                    isEmail = true;
-                    ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
-                    break;
+                    case 5:
+                        editType.add(0, "NATIONALITY");
+                        editType.add(1, "Nationality");
+                        currentInformation = currentNationality;
+                        ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+                        break;
 
-                case 5:
-                    editType.add(0, "NATIONALITY");
-                    editType.add(1, "Nationality");
-                    currentInformation = currentNationality;
-                    ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
-                    break;
-
-                case 6:
-                    isExit = MenuChoices.yesnoConfirmation(scanner,
-                            "Are you sure you want to return to menu? Y/N: ");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please select (Y/N).");
+                    case 6:
+                        isExit = MenuChoices.yesnoConfirmation(scanner, FontStyle.yellow +
+                                "Are you sure you want to return to menu? Y/N: " + FontStyle.reset);
+                        break;
+                    default:
+                        System.out.println(
+                                FontStyle.red + FontStyle.BOLD + "Invalid choice. Please select (Y/N)."
+                                        + FontStyle.reset);
+                }
             }
         }
     }
@@ -133,24 +128,23 @@ public class EditCustomerType {
 
         PreparedStatement pstmt;
         do {
-            System.out.println(FontStyle.blue + "Current Information: " + currentInformation + FontStyle.reset);
-            System.out.println("Enter new Information: ");
-
+            System.out.println(FontStyle.cyan + "Current Information: " + currentInformation + FontStyle.reset);
             while (true) {
-
+                System.out.println("Enter new " + FontStyle.yellow + FontStyle.UNDERLINE + editType.get(1)
+                        + FontStyle.reset + " information: ");
                 String NewInfor = scanner.nextLine();
                 boolean isConfirmed = promptConfirmation(scanner,
                         FontStyle.green + FontStyle.BOLD + "Confirm changes (Y/N)? " + FontStyle.reset);
                 if (isConfirmed) {
-                    boolean isValid = true;
+                    boolean isType = true;
                     if (editType.get(0) == "EMAIL") {
-                        isValid = chkEmail.checkEmailFormat(NewInfor);
+                        isType = chkEmail.checkEmailFormat(NewInfor);
                     }
                     if (editType.get(0) == "PHONE_NUMBER") {
-                        isValid = chkDigits.checkDigits(NewInfor);
+                        isType = chkDigits.checkDigits(NewInfor);
                     }
 
-                    if (!isValid) {
+                    if (!isType) {
                         System.out.println(FontStyle.BOLD + FontStyle.red + "Invalid " + editType.get(1)
                                 + " format. Please enter a valid input." + FontStyle.reset);
                         continue;
@@ -179,6 +173,8 @@ public class EditCustomerType {
             }
             break;
         } while (true);
+        Console.clear();
+
     }
 
     private static boolean promptConfirmation(Scanner scanner, String message) {
@@ -191,7 +187,8 @@ public class EditCustomerType {
                 return false;
             } else {
                 System.out.println(
-                        FontStyle.red + FontStyle.bold + "Invalid input.Please select 'Y' or 'N'." + FontStyle.reset);
+                        FontStyle.red + FontStyle.bold + "Invalid input.Please select 'Y' or 'N'."
+                                + FontStyle.reset);
             }
         }
     }
