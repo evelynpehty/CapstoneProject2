@@ -14,11 +14,11 @@ public class TellerLogin {
         String username;
         String password;
         PreparedStatement pStmt;
-        // boolean isExit = false;
-        System.out.print("Enter your teller username: ");
+
+        System.out.print(FontStyle.bold + FontStyle.yellow + "Enter your teller username: " + FontStyle.reset);
         username = scanner.nextLine();
 
-        System.out.print("Enter your teller password: ");
+        System.out.print(FontStyle.bold + FontStyle.yellow + "Enter your teller password: " + FontStyle.reset);
         System.out.print(FontStyle.hide); // Hide input
         password = scanner.nextLine();
         System.out.print(FontStyle.reset); // Show input
@@ -35,10 +35,10 @@ public class TellerLogin {
                     break;
                 } else {
                     System.out.println(FontStyle.red + "Incorrect login credential!" + FontStyle.reset);
-                    System.out.print("Enter your teller username: ");
+                    System.out.print(FontStyle.bold + FontStyle.yellow + "Enter your teller username: " + FontStyle.reset);
                     username = scanner.nextLine();
 
-                    System.out.print("Enter your teller password: ");
+                    System.out.print(FontStyle.bold + FontStyle.yellow + "Enter your teller password: " + FontStyle.reset);
                     System.out.print(FontStyle.hide); // Hide input
                     password = scanner.nextLine();
                     System.out.print(FontStyle.reset); // Show input

@@ -1,5 +1,6 @@
 DECLARE
     table_count NUMBER;
+    sequence_count NUMBER;
 
 BEGIN
     -- Drop tables if they exist
@@ -36,6 +37,20 @@ BEGIN
     WHERE table_name = 'TRANSACTION';
     IF table_count = 1 THEN
         EXECUTE IMMEDIATE 'DROP TABLE TRANSACTION cascade constraints';
+    END IF;
+    
+    SELECT COUNT(*) INTO sequence_count
+    FROM user_sequences
+    WHERE sequence_name = UPPER('account_id_seq');
+    IF sequence_count = 1 THEN
+        EXECUTE IMMEDIATE 'DROP SEQUENCE account_id_seq';
+    END IF;
+    
+    SELECT COUNT(*) INTO sequence_count
+    FROM user_sequences
+    WHERE sequence_name = UPPER('transaction_id_seq');
+    IF sequence_count = 1 THEN
+        EXECUTE IMMEDIATE 'DROP SEQUENCE transaction_id_seq';
     END IF;
     
     -- Create the CUSTOMER table
