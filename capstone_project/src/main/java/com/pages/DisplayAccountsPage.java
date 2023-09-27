@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.essentials.GetConn;
+import com.styles.Console;
 import com.styles.FontStyle;
 import com.validations.MenuChoices;
 
@@ -17,6 +18,7 @@ public class DisplayAccountsPage {
 
         while (!isExit) {
             int count = 1;
+            Console.clear();
             System.out.println(FontStyle.yellow + "Please select from the following options" + FontStyle.reset);
             System.out.println("-----------------------------------------");
             
@@ -44,6 +46,7 @@ public class DisplayAccountsPage {
             choice = MenuChoices.getUserChoice(scanner, count);
             if (choice < count){
                 System.out.println(FontStyle.green + "Account selected: " + accounts.get(choice - 1) + FontStyle.reset);
+                Console.pause(scanner);
                 AccountPage.run(scanner, accounts.get(choice - 1));
             } else {
                 isExit = true;
