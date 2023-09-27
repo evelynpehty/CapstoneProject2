@@ -10,6 +10,7 @@ public class FontStyle {
     public static String blue = "\u001B[34m";
     public static String cyan = "\u001B[36m";
     public static String purple = "\u001B[35m";
+    public static String ColorReset = "\u001B[0m";
 
     // text formatting
     public static String BOLD = "\u001B[1m";
