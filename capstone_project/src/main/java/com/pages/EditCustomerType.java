@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import com.validations.chkDigits;
 import com.validations.chkEmail;
+import com.validations.chkText;
 import com.essentials.GetConn;
 import com.styles.Console;
 import com.styles.FontStyle;
@@ -137,6 +138,10 @@ public class EditCustomerType {
                         FontStyle.green + FontStyle.BOLD + "Confirm changes (Y/N)? " + FontStyle.reset);
                 if (isConfirmed) {
                     boolean isType = true;
+                    if ((editType.get(0).equals("FIRST_NAME") || editType.get(0).equals("LAST_NAME"))
+                            || editType.get(0).equals("NATIONALITY")) {
+                        isType = chkText.checkText(NewInfor);
+                    }
                     if (editType.get(0) == "EMAIL") {
                         isType = chkEmail.checkEmailFormat(NewInfor);
                     }
