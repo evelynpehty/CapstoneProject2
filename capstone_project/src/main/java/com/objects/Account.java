@@ -1,5 +1,8 @@
 package com.objects;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +16,7 @@ import com.styles.Console;
 import com.styles.FontStyle;
 import com.validations.MenuChoices;
 import com.validations.Validation;
+import com.validations.chkEmail;
 
 public class Account {
     private int id;
@@ -104,7 +108,7 @@ public class Account {
             System.out.println("Deposit fund into this account...");
             System.out.println("Please enter the following details.");
             System.out.print(FontStyle.blue + "Enter the amount to deposit: " + FontStyle.reset);
-            double amount = Validation.validateDouble(scanner);
+            double amount = Validation.validatePositiveDouble(scanner);
             this.setBalance(this.getBalance() + amount);
     
             try {
@@ -140,7 +144,7 @@ public class Account {
             System.out.println("Withdraw fund from this account...");
             System.out.println("Please enter the following details.");
             System.out.print(FontStyle.blue + "Enter the amount to withdraw: " + FontStyle.reset);
-            double amount = Validation.validateDouble(scanner);
+            double amount = Validation.validatePositiveDouble(scanner);
     
             if (amount > this.getBalance()){
                 System.out.println(FontStyle.red + "Insufficient fund. Returning to account..." + FontStyle.reset);
@@ -181,7 +185,7 @@ public class Account {
             System.out.println("Transfer fund to another account...");
             System.out.println("Please enter the following details.");
             System.out.print(FontStyle.blue + "Enter the payee's account ID: " + FontStyle.reset); 
-            Account payee = getAccount(Validation.validateInt(scanner));
+            Account payee = getAccount(Validation.validatePositiveInt(scanner));
     
             if (Objects.isNull(payee)) {
                 System.out.println(FontStyle.red + "Account ID could not be found." + FontStyle.reset);
@@ -189,7 +193,7 @@ public class Account {
                 System.out.println(FontStyle.red + "The payee's account is inactive. Fund cannot be transferred to the account." + FontStyle.reset);
             } else {
                 System.out.print(FontStyle.blue + "Enter the amount to transfer: " + FontStyle.reset);
-                double amount = Validation.validateDouble(scanner);
+                double amount = Validation.validatePositiveDouble(scanner);
     
                 if (amount > this.getBalance()) {
                     System.out.println(FontStyle.red + "Insufficient fund. Returning to account..." + FontStyle.reset);
@@ -268,24 +272,47 @@ public class Account {
         Console.pause(scanner);
     }
 
+
+    static BufferedWriter bufferedWriter;
     public void viewTransaction(Scanner scanner) {
         Console.clear();
-        PreparedStatement statement = GetConn.getPreparedStatement("SELECT * FROM transaction WHERE account_id = ? OR transaction_party_accountid = ? ORDER BY transaction_datetime DESC");
+        PreparedStatement statement = GetConn.getPreparedStatement("SELECT * FROM transaction WHERE account_id = ? OR transaction_party_accountid = ? ORDER BY transaction_id DESC");
+
+        String fileName = "transaction_hist.txt";
         try {
+            FileWriter fileWriter = new FileWriter(fileName, false);
+            fileWriter.close();
+        
+            bufferedWriter = new BufferedWriter(
+                new FileWriter(fileName, true));       
+
             statement.setInt(1, this.getId());
             statement.setInt(2, this.getId());
             ResultSet resultSet = statement.executeQuery();
 
+            // Write the header to the file
+            bufferedWriter.write(String.format("%15s | %-6s | %10s | %15s | %15s | %15s%n", "Transaction ID", "ID", "Type", "Value", "Date", "Third Party ID"));
+            bufferedWriter.newLine();
+
             System.out.printf(FontStyle.bold + FontStyle.purple + "%15s | %-6s | %10s | %15s | %15s | %15s|%n" + FontStyle.reset, "Transaction ID", "ID", "Type", "Value", "Date", "Third Party ID");
             while (resultSet.next()) {
                 int payee_id = resultSet.getInt("transaction_party_accountid");
+
                 if (payee_id == 0) {
+                    bufferedWriter.write(String.format("%15d | %-6d | %10S | %15.2f | %15s | %15s|%n", resultSet.getInt("transaction_id"), resultSet.getInt("account_id"),
+                        resultSet.getString("transaction_type"), resultSet.getDouble("transaction_value"), resultSet.getDate("transaction_datetime").toLocalDate(),"NA"));
+                    bufferedWriter.newLine();
+
                     System.out.printf(
                         FontStyle.cyan + "%15d | %-6d | %10S | %15.2f | %15s | %15s|%n" + FontStyle.reset, resultSet.getInt("transaction_id"), resultSet.getInt("account_id"),
                         resultSet.getString("transaction_type"), resultSet.getDouble("transaction_value"), resultSet.getDate("transaction_datetime").toLocalDate(),
                         "NA"
                     );
                 } else {
+                    bufferedWriter.write(String.format("%15d | %-6d | %10S | %15.2f | %15s | %15s|%n", resultSet.getInt("transaction_id"), resultSet.getInt("account_id"),
+                    resultSet.getString("transaction_type"), resultSet.getDouble("transaction_value"), resultSet.getDate("transaction_datetime").toLocalDate(),payee_id));
+                    bufferedWriter.newLine();
+
                     System.out.printf(
                         FontStyle.cyan + "%15d | %-6d | %10S | %15.2f | %15s | %15d|%n" + FontStyle.reset, resultSet.getInt("transaction_id"), resultSet.getInt("account_id"),
                         resultSet.getString("transaction_type"), resultSet.getDouble("transaction_value"), resultSet.getDate("transaction_datetime").toLocalDate(),
@@ -293,11 +320,33 @@ public class Account {
                     );
                 }
             }
-        } catch (SQLException e) {
-            // TODO: handle exception
+        } catch (IOException | SQLException e) {
             System.err.println(FontStyle.red + "Error occurred while retrieving the transaction history." + FontStyle.reset);
+        } finally{
+            try {
+                bufferedWriter.close();
+                boolean isYes = MenuChoices.yesnoConfirmation(scanner, FontStyle.yellow + "Do you want to send a copy to the customer? Y/N: "+ FontStyle.reset);
+                if (isYes){
+                    System.out.print(FontStyle.yellow + "Enter Customer's Email: " + FontStyle.reset);
+                    String email = scanner.nextLine();
+                    while(true){
+                        if(chkEmail.checkEmailFormat(email)){
+                            SendEmail.sendemail(email, "Transaction History", "Please find your transaction history in the attached.", fileName);
+                            break;
+                        }
+                        else{
+                            System.out.println(FontStyle.red + "Invaid email!" + FontStyle.reset);
+                            System.out.print(FontStyle.yellow + "Enter Customer's Email: " + FontStyle.reset);
+                            email = scanner.nextLine();
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            GetConn.closeConn();
+            Console.pause(scanner);
         }
-        GetConn.closeConn();
-        Console.pause(scanner);
+        
     }
 }
