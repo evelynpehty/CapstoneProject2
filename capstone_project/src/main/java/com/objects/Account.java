@@ -104,7 +104,7 @@ public class Account {
             System.out.println("Deposit fund into this account...");
             System.out.println("Please enter the following details.");
             System.out.print(FontStyle.blue + "Enter the amount to deposit: " + FontStyle.reset);
-            double amount = Validation.validateDouble(scanner);
+            double amount = Validation.validatePositiveDouble(scanner);
             this.setBalance(this.getBalance() + amount);
     
             try {
@@ -140,7 +140,7 @@ public class Account {
             System.out.println("Withdraw fund from this account...");
             System.out.println("Please enter the following details.");
             System.out.print(FontStyle.blue + "Enter the amount to withdraw: " + FontStyle.reset);
-            double amount = Validation.validateDouble(scanner);
+            double amount = Validation.validatePositiveDouble(scanner);
     
             if (amount > this.getBalance()){
                 System.out.println(FontStyle.red + "Insufficient fund. Returning to account..." + FontStyle.reset);
@@ -181,7 +181,7 @@ public class Account {
             System.out.println("Transfer fund to another account...");
             System.out.println("Please enter the following details.");
             System.out.print(FontStyle.blue + "Enter the payee's account ID: " + FontStyle.reset); 
-            Account payee = getAccount(Validation.validateInt(scanner));
+            Account payee = getAccount(Validation.validatePositiveInt(scanner));
     
             if (Objects.isNull(payee)) {
                 System.out.println(FontStyle.red + "Account ID could not be found." + FontStyle.reset);
@@ -189,7 +189,7 @@ public class Account {
                 System.out.println(FontStyle.red + "The payee's account is inactive. Fund cannot be transferred to the account." + FontStyle.reset);
             } else {
                 System.out.print(FontStyle.blue + "Enter the amount to transfer: " + FontStyle.reset);
-                double amount = Validation.validateDouble(scanner);
+                double amount = Validation.validatePositiveDouble(scanner);
     
                 if (amount > this.getBalance()) {
                     System.out.println(FontStyle.red + "Insufficient fund. Returning to account..." + FontStyle.reset);
@@ -270,7 +270,7 @@ public class Account {
 
     public void viewTransaction(Scanner scanner) {
         Console.clear();
-        PreparedStatement statement = GetConn.getPreparedStatement("SELECT * FROM transaction WHERE account_id = ? OR transaction_party_accountid = ? ORDER BY transaction_datetime DESC");
+        PreparedStatement statement = GetConn.getPreparedStatement("SELECT * FROM transaction WHERE account_id = ? OR transaction_party_accountid = ? ORDER BY transaction_id DESC");
         try {
             statement.setInt(1, this.getId());
             statement.setInt(2, this.getId());

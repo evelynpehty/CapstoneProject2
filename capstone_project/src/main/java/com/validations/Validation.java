@@ -6,10 +6,10 @@ import java.util.Scanner;
 import com.styles.FontStyle;
 
 public class Validation {
-    public static double validateDouble(Scanner scanner) {
+    public static double validatePositiveDouble(Scanner scanner) {
         while (true) {
             try {
-                double input = scanner.nextDouble();
+                double input = validatePositive(scanner.nextDouble());
                 scanner.nextLine();
                 return input;
             } catch (InputMismatchException e) {
@@ -19,10 +19,10 @@ public class Validation {
         }
     }
 
-    public static int validateInt(Scanner scanner) {
+    public static int validatePositiveInt(Scanner scanner) {
         while (true) {
             try {
-                int input = scanner.nextInt();
+                int input = validatePositive(scanner.nextInt());
                 scanner.nextLine();
                 return input;
             } catch (InputMismatchException e) {
@@ -30,6 +30,14 @@ public class Validation {
                 scanner.nextLine();
                 System.out.print(FontStyle.red + "Invalid input. Please try again: " + FontStyle.reset);
             }
+        }
+    }
+
+    private static <T extends Number> T validatePositive(T x) {
+        if (Math.signum(x.doubleValue()) > 0) {
+            return x;
+        } else {
+            throw new InputMismatchException();
         }
     }
 }
