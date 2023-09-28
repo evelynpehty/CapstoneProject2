@@ -16,14 +16,14 @@ public class ExistingCustomer {
     public static void checkExistingCustomer(Scanner scanner) {
         Console.clear();
         System.out.println(FontStyle.bold + FontStyle.blue + "2. Existing Customer" + FontStyle.reset);
-        System.out.print(FontStyle.bold + FontStyle.yellow +"Please key in cutomer's NRIC: " + FontStyle.reset);
+        System.out.print(FontStyle.bold + FontStyle.yellow + "Please key in cutomer's NRIC: " + FontStyle.reset);
         String nric = scanner.nextLine().trim();
-        
+
         try {
             String sqlQuery = "select * from customer where upper(nric) = upper(?)";
             PreparedStatement pstmt = GetConn.getPreparedStatement(sqlQuery);
             pstmt.setString(1, nric);
-            ResultSet resultSet = pstmt.executeQuery();    
+            ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
                 nric = resultSet.getString("nric");
                 showAccountsMenu(scanner, nric);
@@ -35,7 +35,7 @@ public class ExistingCustomer {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             GetConn.closeConn();
             Console.pause(scanner);
         }
@@ -46,6 +46,7 @@ public class ExistingCustomer {
         int choice;
         boolean isExit = false;
         while (!isExit) {
+            Console.clear();
             System.out.println(FontStyle.bold + "Please select from the following options" + FontStyle.reset);
             System.out.println("1. Create Account");
             System.out.println("2. Display Accounts");
@@ -77,6 +78,6 @@ public class ExistingCustomer {
                     System.out.println("Invalid choice. Please try again.");
             }
         }
-        
-    } 
+
+    }
 }
