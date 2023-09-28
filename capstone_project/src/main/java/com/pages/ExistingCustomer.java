@@ -7,13 +7,16 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import com.essentials.GetConn;
+import com.objects.ScannerManager;
 import com.styles.Console;
 import com.styles.FontStyle;
 import com.validations.MenuChoices;
 
 public class ExistingCustomer {
 
-    public static void checkExistingCustomer(Scanner scanner) {
+    static Scanner scanner = ScannerManager.getScanner();
+
+    public static void checkExistingCustomer() {
         Console.clear();
         System.out.println(FontStyle.bold + FontStyle.blue + "2. Existing Customer" + FontStyle.reset);
         System.out.print(FontStyle.bold + FontStyle.yellow + "Please key in cutomer's NRIC: " + FontStyle.reset);
@@ -26,7 +29,7 @@ public class ExistingCustomer {
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
                 nric = resultSet.getString("nric");
-                showAccountsMenu(scanner, nric);
+                showAccountsMenu(nric);
 
                 resultSet.close();
                 pstmt.close();
@@ -42,7 +45,7 @@ public class ExistingCustomer {
 
     }
 
-    public static void showAccountsMenu(Scanner scanner, String nric) {
+    public static void showAccountsMenu(String nric) {
         int choice;
         boolean isExit = false;
         while (!isExit) {
@@ -54,25 +57,24 @@ public class ExistingCustomer {
             System.out.println("4. Edit Customer Details");
             System.out.println("5. Exit");
 
-            choice = MenuChoices.getUserChoice(scanner, 5);
+            choice = MenuChoices.getUserChoice(5);
 
             switch (choice) {
                 case 1:
-                    CreateAccount.show(scanner, nric);
+                    CreateAccount.show(nric);
                     break;
                 case 2:
-                    DisplayAccountsPage.show(scanner, nric);
+                    DisplayAccountsPage.show(nric);
                     break;
                 case 3:
-                    ViewCustomerDetails.show(scanner, nric);
+                    ViewCustomerDetails.show(nric);
                     break;
                 case 4:
-                    EditCustomerType.show(scanner, nric);
+                    EditCustomerType.show(nric);
                     // EditCustomerDetails.show(scanner,nric);
                     break;
                 case 5:
-                    isExit = MenuChoices.yesnoConfirmation(scanner,
-                            "Are you sure you want to exit the application? Y/N: ");
+                    isExit = MenuChoices.yesnoConfirmation("Are you sure you want to exit the application? Y/N: ");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");

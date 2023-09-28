@@ -9,12 +9,14 @@ import java.util.Scanner;
 
 import com.styles.Console;
 import com.essentials.GetConn;
+import com.objects.ScannerManager;
 import com.styles.FontStyle;
 import com.validations.MenuChoices;
 
 public class CreateAccount {
+        static Scanner scanner = ScannerManager.getScanner();
 
-        public static void show(Scanner scanner, String nric) {
+        public static void show(String nric) {
                 boolean isExit = false;
 
                 while (!isExit) {
@@ -56,7 +58,7 @@ public class CreateAccount {
                         String acctType = "";
                         Boolean createAcc = true;
 
-                        choice = MenuChoices.getUserChoice(scanner, 4);
+                        choice = MenuChoices.getUserChoice(4);
 
                         switch (choice) {
                                 case 1:
@@ -69,8 +71,7 @@ public class CreateAccount {
                                         acctType = "Fixed Deposit";
                                         break;
                                 case 4:
-                                        isExit = MenuChoices.yesnoConfirmation(scanner,
-                                                        "Are you sure you want to exit the application? Y/N: ");
+                                        isExit = MenuChoices.yesnoConfirmation("Are you sure you want to exit the application? Y/N: ");
                                         createAcc = false;
                                         break;
                                 default:

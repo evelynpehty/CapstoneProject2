@@ -8,11 +8,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import com.essentials.GetConn;
+import com.objects.ScannerManager;
 import com.styles.Console;
 import com.styles.FontStyle;
 
 public class ViewCustomerDetails {
-    public static void show(Scanner scanner, String nric) {
+    static Scanner scanner = ScannerManager.getScanner();
+
+    public static void show(String nric) {
         try {
             Console.clear();
             String sqlQuery = "select * from customer where upper(nric) = upper(?)";

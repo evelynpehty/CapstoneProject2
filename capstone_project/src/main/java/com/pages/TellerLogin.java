@@ -6,11 +6,13 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.essentials.GetConn;
+import com.objects.ScannerManager;
 import com.styles.FontStyle;
 
 public class TellerLogin {
 
-    public static void login(Scanner scanner) {
+    public static void login() {
+        Scanner scanner = ScannerManager.getScanner();
         String username;
         String password;
         PreparedStatement pStmt;
@@ -49,6 +51,6 @@ public class TellerLogin {
                 GetConn.closeConn();
             }
         }
-        TellerMenu.displayTeller(scanner);
+        TellerMenu.displayTeller();
     }
 }

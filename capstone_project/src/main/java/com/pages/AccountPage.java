@@ -3,11 +3,14 @@ package com.pages;
 import java.util.Scanner;
 
 import com.objects.Account;
+import com.objects.ScannerManager;
 import com.styles.Console;
 import com.styles.FontStyle;
 import com.validations.MenuChoices;
 
 public class AccountPage {
+    static Scanner scanner = ScannerManager.getScanner();
+
     private static int show() {
         int n = 7;
 
@@ -23,7 +26,7 @@ public class AccountPage {
         return n;
     }
 
-    public static void run(Scanner scanner, int id) {
+    public static void run(int id) {
         Account account = new Account(id);
         boolean exit = false;
 
@@ -31,26 +34,26 @@ public class AccountPage {
             Console.clear();
             System.out.println(FontStyle.cyan + "This is your " + account.getType() + " account " + account.getId() + "..." + FontStyle.reset);
             int n = AccountPage.show();
-            int choice = MenuChoices.getUserChoice(scanner, n);
+            int choice = MenuChoices.getUserChoice(n);
 
             switch (choice) {
                 case 1:
-                    account.viewBalance(scanner);
+                    account.viewBalance();
                     break;
                 case 2:
-                    account.deposit(scanner);
+                    account.deposit();
                     break;
                 case 3:
-                    account.withdraw(scanner);
+                    account.withdraw();
                     break;
                 case 4:
-                    account.transfer(scanner);
+                    account.transfer();
                     break;
                 case 5:
-                    account.viewTransaction(scanner);
+                    account.viewTransaction();
                     break;
                 case 6:
-                    account.toggleActive(scanner);
+                    account.toggleActive();
                     break;
                 case 7:
                     exit = true;

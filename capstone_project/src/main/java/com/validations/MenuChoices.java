@@ -2,8 +2,11 @@ package com.validations;
 
 import java.util.Scanner;
 
+import com.objects.ScannerManager;
+
 public class MenuChoices {
-    public static int getUserChoice(Scanner scanner, int noOfChoice) {
+    static Scanner scanner = ScannerManager.getScanner();
+    public static int getUserChoice(int noOfChoice) {
         int userChoice;
 
         do {
@@ -25,7 +28,7 @@ public class MenuChoices {
         return userChoice;
     }
 
-    public static boolean yesnoConfirmation(Scanner scanner, String message) {
+    public static boolean yesnoConfirmation(String message) {
         System.out.print(message);
         String input = scanner.next().toLowerCase();
         scanner.nextLine();
