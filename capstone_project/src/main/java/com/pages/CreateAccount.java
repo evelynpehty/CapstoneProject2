@@ -133,8 +133,6 @@ public class CreateAccount {
                     e.printStackTrace();
                 }
             }
-            isExit = true;
-
         }
 
     }
