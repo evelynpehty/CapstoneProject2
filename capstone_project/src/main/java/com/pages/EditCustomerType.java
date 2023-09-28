@@ -31,7 +31,7 @@ public class EditCustomerType {
         int choice;
         boolean isExit = false;
         while (!isExit) {
-            Console.clear();
+            // Console.clear();
             boolean isEmail = false;
             try {
                 stmt.setString(1, nric);
