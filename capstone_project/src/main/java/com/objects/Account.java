@@ -26,6 +26,8 @@ public class Account {
     private boolean active;
     private LocalDate createDate;
 
+    static Scanner scanner = ScannerManager.getScanner();
+
     public Account(int id) {
         PreparedStatement statement = GetConn.getPreparedStatement("SELECT * FROM account WHERE account_id = ?");
         try {
@@ -94,13 +96,13 @@ public class Account {
         this.active = active;
     }
 
-    public void viewBalance(Scanner scanner){
+    public void viewBalance(){
         Console.clear();
         System.out.println("Your " + this.getType() + " account " + this.getId() + " balance is: " + FontStyle.green + this.getBalance() + FontStyle.reset);
         Console.pause(scanner);
     }
 
-    public void deposit(Scanner scanner){
+    public void deposit(){
         Console.clear();
         if (!this.isActive()) {
             System.out.println(FontStyle.red + "This account is inactive. Please activate it before making a deposit." + FontStyle.reset);
@@ -136,7 +138,7 @@ public class Account {
         Console.pause(scanner);
     }
 
-    public void withdraw(Scanner scanner){
+    public void withdraw(){
         Console.clear();
         if (!this.isActive()) {
             System.out.println(FontStyle.red + "This account is inactive. Please activate it before making a withdrawal." + FontStyle.reset);
@@ -177,7 +179,7 @@ public class Account {
         Console.pause(scanner);
     }
 
-    public void transfer(Scanner scanner) {
+    public void transfer() {
         Console.clear();
         if (!this.isActive()) {
             System.out.println(FontStyle.red + "This account is inactive. Please activate it before making a transfer" + FontStyle.reset);
@@ -247,11 +249,11 @@ public class Account {
         return account;
     }
 
-    public void toggleActive(Scanner scanner) {
+    public void toggleActive() {
         Console.clear();
         System.out.println("This account is " + (this.isActive() ? FontStyle.green + "active" : FontStyle.red + "inactive") + FontStyle.reset + " now.");
         System.out.print("Do you want to " + (this.isActive() ? FontStyle.red + "deactivate" : FontStyle.green + "activate") + FontStyle.reset + " it (Y/N)? ");
-        boolean toggle = MenuChoices.yesnoConfirmation(scanner, "");
+        boolean toggle = MenuChoices.yesnoConfirmation("");
 
         if (toggle) {
             this.setActive(!this.isActive());
@@ -274,7 +276,7 @@ public class Account {
 
 
     static BufferedWriter bufferedWriter;
-    public void viewTransaction(Scanner scanner) {
+    public void viewTransaction() {
         Console.clear();
         PreparedStatement statement = GetConn.getPreparedStatement("SELECT * FROM transaction WHERE account_id = ? OR transaction_party_accountid = ? ORDER BY transaction_id DESC");
 
@@ -325,7 +327,7 @@ public class Account {
         } finally{
             try {
                 bufferedWriter.close();
-                boolean isYes = MenuChoices.yesnoConfirmation(scanner, FontStyle.yellow + "Do you want to send a copy to the customer? Y/N: "+ FontStyle.reset);
+                boolean isYes = MenuChoices.yesnoConfirmation(FontStyle.yellow + "Do you want to send a copy to the customer? Y/N: "+ FontStyle.reset);
                 if (isYes){
                     System.out.print(FontStyle.yellow + "Enter Customer's Email: " + FontStyle.reset);
                     String email = scanner.nextLine();

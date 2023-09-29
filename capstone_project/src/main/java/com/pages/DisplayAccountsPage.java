@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.essentials.GetConn;
+import com.objects.ScannerManager;
 import com.styles.Console;
 import com.styles.FontStyle;
 import com.validations.MenuChoices;
 
 public class DisplayAccountsPage {
-    public static void show(Scanner scanner, String nric) {
+    static Scanner scanner = ScannerManager.getScanner();
+
+    public static void show(String nric) {
         boolean isExit = false;
         int choice;
 
@@ -43,11 +46,11 @@ public class DisplayAccountsPage {
             }
             GetConn.closeConn();
             System.out.println(count + ". Back" + FontStyle.reset);
-            choice = MenuChoices.getUserChoice(scanner, count);
+            choice = MenuChoices.getUserChoice(count);
             if (choice < count){
                 System.out.println(FontStyle.green + "Account selected: " + accounts.get(choice - 1) + FontStyle.reset);
                 Console.pause(scanner);
-                AccountPage.run(scanner, accounts.get(choice - 1));
+                AccountPage.run(accounts.get(choice - 1));
             } else {
                 isExit = true;
             }

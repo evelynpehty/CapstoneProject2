@@ -14,6 +14,7 @@ import com.validations.chkDigits;
 import com.validations.chkEmail;
 import com.validations.chkDate;
 import com.essentials.GetConn;
+import com.objects.ScannerManager;
 import com.styles.Console;
 import com.styles.FontStyle;;
 
@@ -29,7 +30,9 @@ public class CreateCustomer {
     static String email;
     static String choiceInput;
 
-    static Period getAge(Scanner scanner){
+    public static Scanner scanner = ScannerManager.getScanner();
+
+    public static Period getAge(){
         System.out.print(FontStyle.bold + FontStyle.yellow + "Enter DOB (YYYY-MM-DD): " + FontStyle.reset);
         strDate = scanner.nextLine();
     
@@ -52,7 +55,7 @@ public class CreateCustomer {
         return age;
     }
     
-    static void strInputField(Scanner scanner, String type){
+    public static void strInputField(String type){
          // FIRST NAME - required field and only contain alphabet
         System.out.print(FontStyle.yellow + FontStyle.bold + "Enter " + type + ": " + FontStyle.reset);
         String temp = scanner.nextLine();
@@ -76,7 +79,7 @@ public class CreateCustomer {
         }
     }
 
-    static void genderInput(Scanner scanner){
+    static void genderInput(){
         // Gender - required field and only contain M or F
         System.out.print(FontStyle.yellow + FontStyle.bold + "Enter Gender (M/F): " + FontStyle.reset);
         gender = scanner.nextLine();
@@ -97,7 +100,7 @@ public class CreateCustomer {
         }
     }
 
-    static void phoneNumberInput(Scanner scanner){
+    static void phoneNumberInput(){
         System.out.print(FontStyle.yellow + FontStyle.bold + "Enter phone number: " + FontStyle.reset);
         phoneNumber = scanner.nextLine();
 
@@ -112,7 +115,7 @@ public class CreateCustomer {
         }
     }
 
-    static void emailInput(Scanner scanner){
+    static void emailInput(){
         System.out.print(FontStyle.yellow + FontStyle.bold + "Enter email: " + FontStyle.reset);
         email = scanner.nextLine();
 
@@ -135,7 +138,7 @@ public class CreateCustomer {
         
     }
     
-    static ResultSet scanNRIC(Scanner scanner){
+    static ResultSet scanNRIC(){
         System.out.print(FontStyle.yellow + FontStyle.bold + "Enter NRIC: " + FontStyle.reset);
         nric = scanner.nextLine();
         
@@ -183,7 +186,7 @@ public class CreateCustomer {
         System.out.println("+---+---------------------+---------------------+");
     }
 
-    static void choiceInput(Scanner scanner){
+    static void choiceInput(){
         System.out.print(FontStyle.yellow + "Key Y to confirm creation, N to cancel creation or (1-8) to edit fields: " + FontStyle.reset);
         choiceInput = scanner.nextLine();
 
@@ -210,27 +213,27 @@ public class CreateCustomer {
         }
     }
 
-    public static void show(Scanner scanner){
+    public static void show(){
         try {
-            Console.clear();
+            //Console.clear();
             System.out.println(FontStyle.bold + FontStyle.cyan + "Create New Customer\n" + FontStyle.reset);
 
-            if (getAge(scanner).getYears() >= 18) {
-                if(scanNRIC(scanner).next()){
+            if (getAge().getYears() >= 18) {
+                if(scanNRIC().next()){
                     System.out.println(FontStyle.red + "Customer Exists!" + FontStyle.reset);
                 } else{
-                    strInputField(scanner, "first name"); // first name
-                    strInputField(scanner, "last name");  // last name
-                    genderInput(scanner); // gender
-                    phoneNumberInput(scanner); //phpne number 
-                    emailInput(scanner); //email
-                    strInputField(scanner, "nationality");  // nationality
+                    strInputField("first name"); // first name
+                    strInputField("last name");  // last name
+                    genderInput(); // gender
+                    phoneNumberInput(); //phpne number 
+                    emailInput(); //email
+                    strInputField("nationality");  // nationality
 
                     displayCustomerDetails();
                     boolean isConfirmed = false;
 
                     while(true){
-                        choiceInput(scanner);
+                        choiceInput();
                         if(choiceInput.equalsIgnoreCase("y")){
                             isConfirmed = true;
                             break;
@@ -241,32 +244,32 @@ public class CreateCustomer {
                         } else if(Integer.parseInt(choiceInput) >= 1 && Integer.parseInt(choiceInput) <= 8){
                             switch (Integer.parseInt(choiceInput)) {
                                 case 1:
-                                    if ((getAge(scanner).getYears() >= 18) == false) {
+                                    if ((getAge().getYears() >= 18) == false) {
                                         System.out.println(FontStyle.red + "Customer must be atleast 18 years old!" + FontStyle.reset);
                                     }
                                     break;                   
                                 case 2:
-                                    if (scanNRIC(scanner).next()){
+                                    if (scanNRIC().next()){
                                         System.out.println(FontStyle.red + "Invalid NRIC, customer already existed!" + FontStyle.reset);
                                     }
                                     break;
                                 case 3:
-                                    strInputField(scanner, "first name");
+                                    strInputField("first name");
                                     break;
                                 case 4:
-                                    strInputField(scanner, "last name");
+                                    strInputField("last name");
                                     break;
                                 case 5:
-                                    genderInput(scanner);
+                                    genderInput();
                                     break;
                                 case 6:
-                                    phoneNumberInput(scanner);
+                                    phoneNumberInput();
                                     break;
                                 case 7:
-                                    emailInput(scanner);
+                                    emailInput();
                                     break;
                                 case 8:
-                                    strInputField(scanner, "nationality");
+                                    strInputField("nationality");
                                     break;
                                 default:
                                     System.out.println(FontStyle.red + "Invalid choice. Please try again." + FontStyle.reset);
@@ -301,7 +304,7 @@ public class CreateCustomer {
             } else {
                 System.out.println(FontStyle.red + "Unable to Create Customer. He/she must be atleast 18 years old." + FontStyle.reset);
             }
-            Console.pause(scanner);
+            //Console.pause(scanner);
         } catch (SQLException se) {
             System.out.println(FontStyle.red + se.getMessage() + FontStyle.reset);
         } finally{

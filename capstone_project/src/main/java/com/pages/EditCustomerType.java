@@ -10,6 +10,7 @@ import com.validations.chkDigits;
 import com.validations.chkEmail;
 import com.validations.chkText;
 import com.essentials.GetConn;
+import com.objects.ScannerManager;
 import com.styles.Console;
 import com.styles.FontStyle;
 import com.validations.MenuChoices;
@@ -21,8 +22,9 @@ public class EditCustomerType {
     static String currentEmail;
     static String currentdob;
     static String currentNationality;
+    static Scanner scanner = ScannerManager.getScanner();
 
-    public static void show(Scanner scanner, String nric) {
+    public static void show(String nric) {
         String sql = "SELECT * FROM CUSTOMER WHERE UPPER (NRIC) = UPPER (?)";
         PreparedStatement stmt = GetConn.getPreparedStatement(sql);
 
@@ -73,27 +75,27 @@ public class EditCustomerType {
                 System.out.printf("| %1s | %-28s | %-19s |%n", "6", FontStyle.red + "Back" + FontStyle.reset, "");
                 System.out.println("+---+---------------------+---------------------+");
 
-                choice = MenuChoices.getUserChoice(scanner, 6);
+                choice = MenuChoices.getUserChoice(6);
                 switch (choice) {
                     case 1:
                         editType.add(0, "FIRST_NAME");
                         editType.add(1, "First Name");
                         currentInformation = currentFirstName;
 
-                        ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+                        ModifyInfor(nric, currentInformation, editType, isEmail);
                         break;
                     case 2:
                         editType.add(0, "LAST_NAME");
                         editType.add(1, "Last Name");
                         currentInformation = currentLastName;
-                        ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+                        ModifyInfor(nric, currentInformation, editType, isEmail);
                         break;
 
                     case 3:
                         editType.add(0, "PHONE_NUMBER");
                         editType.add(1, "Phone Number");
                         currentInformation = currentPhoneNumber;
-                        ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+                        ModifyInfor(nric, currentInformation, editType, isEmail);
                         break;
 
                     case 4:
@@ -101,18 +103,18 @@ public class EditCustomerType {
                         editType.add(1, "Email");
                         currentInformation = currentEmail;
                         isEmail = true;
-                        ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+                        ModifyInfor(nric, currentInformation, editType, isEmail);
                         break;
 
                     case 5:
                         editType.add(0, "NATIONALITY");
                         editType.add(1, "Nationality");
                         currentInformation = currentNationality;
-                        ModifyInfor(nric, scanner, currentInformation, editType, isEmail);
+                        ModifyInfor(nric, currentInformation, editType, isEmail);
                         break;
 
                     case 6:
-                        isExit = MenuChoices.yesnoConfirmation(scanner, FontStyle.yellow +
+                        isExit = MenuChoices.yesnoConfirmation(FontStyle.yellow +
                                 "Are you sure you want to return to menu? Y/N: " + FontStyle.reset);
                         break;
                     default:
@@ -124,7 +126,7 @@ public class EditCustomerType {
         }
     }
 
-    private static void ModifyInfor(String nric, Scanner scanner, String currentInformation, ArrayList<String> editType,
+    private static void ModifyInfor(String nric, String currentInformation, ArrayList<String> editType,
             boolean isEmail) {
 
         PreparedStatement pstmt;
@@ -134,8 +136,7 @@ public class EditCustomerType {
                 System.out.println("Enter new " + FontStyle.yellow + FontStyle.UNDERLINE + editType.get(1)
                         + FontStyle.reset + " information: ");
                 String NewInfor = scanner.nextLine();
-                boolean isConfirmed = promptConfirmation(scanner,
-                        FontStyle.green + FontStyle.BOLD + "Confirm changes (Y/N)? " + FontStyle.reset);
+                boolean isConfirmed = promptConfirmation(FontStyle.green + FontStyle.BOLD + "Confirm changes (Y/N)? " + FontStyle.reset);
                 if (isConfirmed) {
                     boolean isType = true;
                     if ((editType.get(0).equals("FIRST_NAME") || editType.get(0).equals("LAST_NAME"))
@@ -169,7 +170,7 @@ public class EditCustomerType {
 
                     break;
                 } else {
-                    boolean retry = promptConfirmation(scanner, "Continue to edit " + editType.get(1) + " ? (Y). "
+                    boolean retry = promptConfirmation("Continue to edit " + editType.get(1) + " ? (Y). "
                             + FontStyle.red + "To exit (N)." + FontStyle.reset);
                     if (!retry) {
                         break;
@@ -182,7 +183,7 @@ public class EditCustomerType {
 
     }
 
-    private static boolean promptConfirmation(Scanner scanner, String message) {
+    private static boolean promptConfirmation(String message) {
         while (true) {
             System.out.println(message);
             String res = scanner.nextLine().trim().toUpperCase();
