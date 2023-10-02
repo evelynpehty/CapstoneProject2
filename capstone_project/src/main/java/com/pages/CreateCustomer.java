@@ -30,9 +30,9 @@ public class CreateCustomer {
     static String email;
     static String choiceInput;
 
-    static Scanner scanner = ScannerManager.getScanner();
+    public static Scanner scanner = ScannerManager.getScanner();
 
-    static Period getAge(){
+    public static Period getAge(){
         System.out.print(FontStyle.bold + FontStyle.yellow + "Enter DOB (YYYY-MM-DD): " + FontStyle.reset);
         strDate = scanner.nextLine();
     
@@ -55,7 +55,7 @@ public class CreateCustomer {
         return age;
     }
     
-    static void strInputField(String type){
+    public static void strInputField(String type){
          // FIRST NAME - required field and only contain alphabet
         System.out.print(FontStyle.yellow + FontStyle.bold + "Enter " + type + ": " + FontStyle.reset);
         String temp = scanner.nextLine();
@@ -215,7 +215,7 @@ public class CreateCustomer {
 
     public static void show(){
         try {
-            Console.clear();
+            //Console.clear();
             System.out.println(FontStyle.bold + FontStyle.cyan + "Create New Customer\n" + FontStyle.reset);
 
             if (getAge().getYears() >= 18) {
@@ -304,7 +304,7 @@ public class CreateCustomer {
             } else {
                 System.out.println(FontStyle.red + "Unable to Create Customer. He/she must be atleast 18 years old." + FontStyle.reset);
             }
-            Console.pause(scanner);
+            //Console.pause(scanner);
         } catch (SQLException se) {
             System.out.println(FontStyle.red + se.getMessage() + FontStyle.reset);
         } finally{

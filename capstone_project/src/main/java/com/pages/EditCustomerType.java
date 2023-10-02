@@ -23,7 +23,6 @@ public class EditCustomerType {
     static String currentNationality;
     static Scanner scanner = ScannerManager.getScanner();
 
-
     public static void show(String nric) {
         String sql = "SELECT * FROM CUSTOMER WHERE UPPER (NRIC) = UPPER (?)";
         PreparedStatement stmt = GetConn.getPreparedStatement(sql);

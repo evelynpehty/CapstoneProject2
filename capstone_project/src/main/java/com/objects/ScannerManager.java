@@ -9,6 +9,10 @@ public class ScannerManager {
         return scanner;
     }
 
+    public static void setScanner(Scanner customScanner) {
+        scanner = customScanner;
+    }
+
     public static void closeScanner() {
         scanner.close();
     }
