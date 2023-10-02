@@ -99,7 +99,7 @@ public class Account {
     public void viewBalance(){
         Console.clear();
         System.out.println("Your " + this.getType() + " account " + this.getId() + " balance is: " + FontStyle.green + this.getBalance() + FontStyle.reset);
-        Console.pause(scanner);
+        // Console.pause(scanner);
     }
 
     public void deposit(){
