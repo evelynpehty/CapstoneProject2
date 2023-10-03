@@ -1,4 +1,6 @@
-# Bank CLI Project - Capstone 2
+# Bank CLI Terminal - Capstone 2
+### An Innovative Java Terminal Banking Application
+
 
 ## Table of Contents
 1. [Introduction](#1-introduction)
