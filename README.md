@@ -1,5 +1,5 @@
 # Bank CLI Terminal - Capstone 2
-### An Innovative Java Terminal Banking Application
+###_ An Innovative Java Terminal Banking Application_
 
 
 ## Table of Contents
