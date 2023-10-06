@@ -1,0 +1,1 @@
+java -cp "lib/*;target/capstone_project-1.0-SNAPSHOT.jar" com.pages.MainPage
